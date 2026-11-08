@@ -1,0 +1,13 @@
+@import url("./themes/theme-default.css");
+@import url("./themes/theme-light.css");
+@import url("./base/reset.css");
+@import url("./base/typography.css");
+@import url("./base/utilities.css");
+@import url("./components/buttons.css");
+@import url("./components/cards.css");
+@import url("./components/forms.css");
+@import url("./components/tables.css");
+@import url("./components/badges.css");
+@import url("./components/alerts.css");
+@import url("./layouts/shell.css");
+@import url("./layouts/auth.css");

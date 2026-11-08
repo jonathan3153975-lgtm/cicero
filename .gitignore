@@ -1,0 +1,54 @@
+# Ambiente
+.env
+.env.*
+!.env.example
+
+# Dependências
+/vendor/
+
+# Logs
+/storage/logs/*
+!/storage/logs/.gitkeep
+
+# Cache e temporários
+/storage/cache/*
+!/storage/cache/.gitkeep
+/storage/temp/*
+!/storage/temp/.gitkeep
+
+# Sessões
+/storage/sessions/*
+!/storage/sessions/.gitkeep
+
+# Arquivos privados
+/storage/private/*
+!/storage/private/.gitkeep
+
+# Uploads de usuários
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Sistema operacional
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Testes e cobertura
+.phpunit.cache/
+coverage/
+.phpunit.result.cache
+
+# Dependências e ferramentas locais
+.php-cs-fixer.cache

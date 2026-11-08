@@ -1,0 +1,328 @@
+body.sidebar-open {
+    overflow: hidden;
+}
+
+.app-shell {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    min-height: 100vh;
+}
+
+.sidebar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+    height: 100vh;
+    padding: var(--spacing-5) var(--spacing-4);
+    border-right: 1px solid var(--color-border);
+    background: var(--color-surface);
+    overflow-y: auto;
+}
+
+.sidebar__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-2);
+}
+
+.sidebar__logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    border-radius: var(--radius-md);
+    background: var(--brand-primary);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.sidebar__brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    min-width: 0;
+}
+
+.sidebar__brand-text strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sidebar__brand-text small {
+    color: var(--color-text-muted);
+}
+
+.sidebar__nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: 10px var(--spacing-3);
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    font-weight: 700;
+    font-size: 0.92rem;
+    transition: background var(--transition), color var(--transition);
+}
+
+.nav-link svg {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    fill: currentColor;
+}
+
+.nav-link:hover {
+    background: var(--color-surface-elevated);
+    color: var(--color-text);
+}
+
+.nav-link.is-active {
+    background: var(--color-surface-elevated);
+    color: var(--color-text);
+    box-shadow: inset 3px 0 0 var(--brand-primary);
+}
+
+.sidebar__footer {
+    margin-top: auto;
+    padding-top: var(--spacing-4);
+    border-top: 1px solid var(--color-border);
+}
+
+.sidebar__hint {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    padding: 0;
+    border: 0;
+    background: rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
+}
+
+.sidebar.is-open + .sidebar-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.app-main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    padding: var(--spacing-4) var(--spacing-6);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+}
+
+.app-header__menu {
+    display: none;
+}
+
+.app-header__title {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    margin-right: auto;
+}
+
+.app-header__title h1 {
+    font-size: 1.15rem;
+}
+
+.app-header__title p {
+    font-size: 0.78rem;
+}
+
+.app-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.user-chip {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: 4px 12px 4px 4px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface-elevated);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.user-chip__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--brand-accent);
+    color: var(--color-text-inverse);
+    font-weight: 700;
+}
+
+.app-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: var(--spacing-6);
+}
+
+.error-page {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    padding: var(--spacing-5);
+    background:
+        radial-gradient(circle at 20% 20%, rgba(245, 88, 0, 0.16), transparent 45%),
+        var(--color-background);
+}
+
+.error-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    width: 100%;
+    max-width: 560px;
+    padding: var(--spacing-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-md);
+}
+
+.error-card h1 {
+    font-size: 2rem;
+}
+
+.error-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-3);
+    margin-top: var(--spacing-2);
+}
+
+.error-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 1.2rem;
+    list-style: disc;
+    color: var(--color-danger);
+    font-size: 0.9rem;
+}
+
+.debug-panel {
+    width: 100%;
+    padding: var(--spacing-4);
+    border: 1px dashed var(--color-danger);
+    border-radius: var(--radius-md);
+    background: rgba(220, 53, 69, 0.06);
+}
+
+.debug-panel strong {
+    color: var(--color-danger);
+    font-size: 0.85rem;
+}
+
+@media (max-width: 1024px) {
+    .page-hero {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .app-shell {
+        display: block;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 40;
+        width: min(86vw, 300px);
+        height: 100vh;
+        transform: translateX(-105%);
+        transition: transform var(--transition);
+        box-shadow: var(--shadow-md);
+    }
+
+    .sidebar.is-open {
+        transform: none;
+    }
+
+    .sidebar-overlay {
+        display: block;
+    }
+
+    .app-header {
+        padding: var(--spacing-3) var(--spacing-4);
+    }
+
+    .app-header__menu {
+        display: inline-flex;
+    }
+
+    .app-content {
+        padding: var(--spacing-4);
+    }
+}
+
+@media (max-width: 600px) {
+    .app-header__title p {
+        display: none;
+    }
+
+    .user-chip__name {
+        display: none;
+    }
+
+    .app-content {
+        gap: var(--spacing-4);
+    }
+
+    .page-hero,
+    .card {
+        padding: var(--spacing-4);
+    }
+
+    .error-card {
+        padding: var(--spacing-5);
+    }
+}

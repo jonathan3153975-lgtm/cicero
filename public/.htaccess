@@ -1,0 +1,18 @@
+Options -Indexes
+
+RewriteEngine On
+
+# Impede acesso a arquivos ocultos
+RewriteRule (^|/)\. - [F,L]
+
+# Arquivos e diretórios existentes são servidos diretamente
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Demais requisições passam pelo Front Controller
+RewriteRule ^ index.php [QSA,L]
+
+# Proteções adicionais
+<FilesMatch "\.(env|ini|log|sql|bak|dist)$">
+    Require all denied
+</FilesMatch>

@@ -1,0 +1,55 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+h1 {
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+}
+
+h2 {
+    font-size: clamp(1.35rem, 1.1rem + 1vw, 1.85rem);
+}
+
+h3 {
+    font-size: clamp(1.1rem, 1rem + 0.4vw, 1.3rem);
+}
+
+p {
+    max-width: 70ch;
+}
+
+small {
+    font-size: 0.8125rem;
+}
+
+strong {
+    font-weight: 700;
+}
+
+code {
+    padding: 2px 6px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-elevated);
+    font-size: 0.85em;
+}
+
+pre code {
+    display: block;
+}
+
+a:not(.btn):not(.nav-link):not(.quick-action) {
+    color: var(--brand-primary);
+    text-underline-offset: 3px;
+}
+
+a:not(.btn):not(.nav-link):not(.quick-action):hover {
+    text-decoration: underline;
+}
