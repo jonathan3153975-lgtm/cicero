@@ -50,45 +50,64 @@ $val = static fn (string $key, string $default = ''): string => (string) ($old[$
     <h3>Nova conta</h3>
     <form method="post" action="/admin/contas-bancarias" class="form">
         <input type="hidden" name="<?= e($csrfName) ?>" value="<?= e($csrfToken) ?>">
-        <div class="form-grid">
-            <div class="form__field">
-                <label for="unidade_id">Unidade</label>
-                <select class="input <?= $err('unidade_id') ? 'is-invalid' : '' ?>" id="unidade_id" name="unidade_id" required>
-                    <option value="">Selecione</option>
-                    <?php foreach ($unidades as $unidade): ?>
-                        <option value="<?= e((string) $unidade['id']) ?>" <?= $val('unidade_id') === (string) $unidade['id'] ? 'selected' : '' ?>>
-                            <?= e($unidade['nome']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                <?php if ($err('unidade_id')): ?><p class="form__error"><?= e($err('unidade_id')) ?></p><?php endif; ?>
+        
+        <!-- Linha 1: Unidade, Tipo, Banco/Caixa -->
+        <div class="row">
+            <div class="col-sm-12 col-md-4">
+                <div class="form__field">
+                    <label for="unidade_id">Unidade</label>
+                    <select class="input <?= $err('unidade_id') ? 'is-invalid' : '' ?>" id="unidade_id" name="unidade_id" required>
+                        <option value="">Selecione</option>
+                        <?php foreach ($unidades as $unidade): ?>
+                            <option value="<?= e((string) $unidade['id']) ?>" <?= $val('unidade_id') === (string) $unidade['id'] ? 'selected' : '' ?>>
+                                <?= e($unidade['nome']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php if ($err('unidade_id')): ?><p class="form__error"><?= e($err('unidade_id')) ?></p><?php endif; ?>
+                </div>
             </div>
-            <div class="form__field">
-                <label for="banco">Banco / caixa</label>
-                <input class="input <?= $err('banco') ? 'is-invalid' : '' ?>" id="banco" name="banco" value="<?= e($val('banco')) ?>" required>
-                <?php if ($err('banco')): ?><p class="form__error"><?= e($err('banco')) ?></p><?php endif; ?>
+            <div class="col-sm-12 col-md-4">
+                <div class="form__field">
+                    <label for="tipo">Tipo</label>
+                    <select class="input" id="tipo" name="tipo">
+                        <?php foreach (['CORRENTE', 'POUPANCA', 'CAIXA', 'INVESTIMENTO'] as $tipo): ?>
+                            <option value="<?= e($tipo) ?>" <?= $val('tipo', 'CORRENTE') === $tipo ? 'selected' : '' ?>><?= e($tipo) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
             </div>
-            <div class="form__field">
-                <label for="agencia">Agência</label>
-                <input class="input" id="agencia" name="agencia" value="<?= e($val('agencia')) ?>">
-            </div>
-            <div class="form__field">
-                <label for="conta">Conta</label>
-                <input class="input" id="conta" name="conta" value="<?= e($val('conta')) ?>">
-            </div>
-            <div class="form__field">
-                <label for="tipo">Tipo</label>
-                <select class="input" id="tipo" name="tipo">
-                    <?php foreach (['CORRENTE', 'POUPANCA', 'CAIXA', 'INVESTIMENTO'] as $tipo): ?>
-                        <option value="<?= e($tipo) ?>" <?= $val('tipo', 'CORRENTE') === $tipo ? 'selected' : '' ?>><?= e($tipo) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="form__field">
-                <label for="saldo_inicial">Saldo inicial</label>
-                <input class="input" id="saldo_inicial" type="number" step="0.01" name="saldo_inicial" value="<?= e($val('saldo_inicial', '0')) ?>">
+            <div class="col-sm-12 col-md-4">
+                <div class="form__field">
+                    <label for="banco">Banco / Caixa</label>
+                    <input class="input <?= $err('banco') ? 'is-invalid' : '' ?>" id="banco" name="banco" value="<?= e($val('banco')) ?>" required>
+                    <?php if ($err('banco')): ?><p class="form__error"><?= e($err('banco')) ?></p><?php endif; ?>
+                </div>
             </div>
         </div>
+
+        <!-- Linha 2: Agência, Conta, Saldo inicial -->
+        <div class="row">
+            <div class="col-sm-12 col-md-4">
+                <div class="form__field">
+                    <label for="agencia">Agência</label>
+                    <input class="input" id="agencia" name="agencia" value="<?= e($val('agencia')) ?>">
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form__field">
+                    <label for="conta">Conta</label>
+                    <input class="input" id="conta" name="conta" value="<?= e($val('conta')) ?>">
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form__field">
+                    <label for="saldo_inicial">Saldo inicial</label>
+                    <input class="input" id="saldo_inicial" name="saldo_inicial" value="<?= e($val('saldo_inicial', '0,00')) ?>" data-mask="currency" inputmode="decimal" autocomplete="off">
+                </div>
+            </div>
+        </div>
+
         <div class="form__actions">
             <button class="btn btn-primary" type="submit">Criar conta</button>
         </div>

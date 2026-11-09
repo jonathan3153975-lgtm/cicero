@@ -9,9 +9,11 @@ final class RedeRepository extends Repository
     public function findById(int $id): ?array
     {
         $statement = $this->pdo()->prepare(
-            'SELECT id, razao_social, nome_fantasia, cnpj, email, telefone, cep, logradouro, numero,'
-            . ' complemento, bairro, cidade, estado, status, plano_contratado'
-            . ' FROM redes WHERE id = :id LIMIT 1'
+            'SELECT r.id, r.razao_social, r.nome_fantasia, r.cnpj, r.email, r.telefone, r.cep,'
+            . ' r.logradouro, r.numero, r.complemento, r.bairro, r.cidade, r.estado, r.status,'
+            . ' r.plano_contratado, r.plano_rede_id, pr.nome AS plano_nome'
+            . ' FROM redes r LEFT JOIN planos_rede pr ON pr.id = r.plano_rede_id'
+            . ' WHERE r.id = :id LIMIT 1'
         );
         $statement->execute(['id' => $id]);
         $row = $statement->fetch();
@@ -42,8 +44,10 @@ final class RedeRepository extends Repository
     public function all(): array
     {
         $statement = $this->pdo()->query(
-            'SELECT id, razao_social, nome_fantasia, cnpj, email, telefone, cidade, estado, status,'
-            . ' plano_contratado FROM redes ORDER BY nome_fantasia ASC'
+            'SELECT r.id, r.razao_social, r.nome_fantasia, r.cnpj, r.email, r.telefone, r.cidade,'
+            . ' r.estado, r.status, r.plano_contratado, r.plano_rede_id, pr.nome AS plano_nome'
+            . ' FROM redes r LEFT JOIN planos_rede pr ON pr.id = r.plano_rede_id'
+            . ' ORDER BY r.nome_fantasia ASC'
         );
 
         return $statement->fetchAll();
@@ -53,9 +57,9 @@ final class RedeRepository extends Repository
     {
         $statement = $this->pdo()->prepare(
             'INSERT INTO redes (razao_social, nome_fantasia, cnpj, email, telefone, cep, logradouro,'
-            . ' numero, complemento, bairro, cidade, estado, status, plano_contratado)'
+            . ' numero, complemento, bairro, cidade, estado, status, plano_contratado, plano_rede_id)'
             . ' VALUES (:razao_social, :nome_fantasia, :cnpj, :email, :telefone, :cep, :logradouro,'
-            . ' :numero, :complemento, :bairro, :cidade, :estado, :status, :plano_contratado)'
+            . ' :numero, :complemento, :bairro, :cidade, :estado, :status, :plano_contratado, :plano_rede_id)'
         );
         $statement->execute($this->parameters($data));
 
@@ -72,7 +76,7 @@ final class RedeRepository extends Repository
             . ' cnpj = :cnpj, email = :email, telefone = :telefone, cep = :cep,'
             . ' logradouro = :logradouro, numero = :numero, complemento = :complemento,'
             . ' bairro = :bairro, cidade = :cidade, estado = :estado, status = :status,'
-            . ' plano_contratado = :plano_contratado WHERE id = :id'
+            . ' plano_contratado = :plano_contratado, plano_rede_id = :plano_rede_id WHERE id = :id'
         );
         $statement->execute($parameters);
     }
@@ -94,6 +98,7 @@ final class RedeRepository extends Repository
             'estado' => $data['estado'] ?? null,
             'status' => $data['status'] ?? 'ATIVA',
             'plano_contratado' => $data['plano_contratado'] ?? null,
+            'plano_rede_id' => $data['plano_rede_id'] ?? null,
         ];
     }
 }

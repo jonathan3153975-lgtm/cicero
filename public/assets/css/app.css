@@ -9,5 +9,6 @@
 @import url("./components/tables.css");
 @import url("./components/badges.css");
 @import url("./components/alerts.css");
+@import url("./components/loading.css");
 @import url("./layouts/shell.css");
 @import url("./layouts/auth.css");

@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Repositories\CobrancaRepository;
 use App\Repositories\ContaBancariaRepository;
 use App\Repositories\ContaPagarRepository;
+use App\Repositories\ModalidadeRepository;
 use App\Repositories\PermissaoRepository;
 use App\Repositories\RedeRepository;
 use App\Repositories\RegiaoRepository;
@@ -49,6 +50,7 @@ final class AdminDashboardController extends AdminController
         private readonly FrequenciaService $frequenciaService,
         private readonly ReservaService $reservaService,
         private readonly AcessoService $acessoService,
+        private readonly ModalidadeRepository $modalidades,
         private readonly CobrancaRepository $cobrancas,
         private readonly ContaPagarRepository $contasPagar,
         private readonly ContaBancariaRepository $contasBancarias
@@ -73,6 +75,7 @@ final class AdminDashboardController extends AdminController
                 'usuarios' => count($this->usuarios->forScope($redeId, $unidadeId, $regiaoId)),
                 'pessoas' => count($this->pessoaService->forScope($redeId, $unidadeId, $regiaoId, $this->actorId())),
                 'alunos' => count($this->alunoService->forScope($redeId, $unidadeId, $regiaoId)),
+                'modalidades' => count($this->modalidades->forScope($redeId, $this->isPlatformContext())),
                 'planos' => count($this->planoService->allForScope($redeId, $this->isPlatformContext())),
                 'matriculas' => count($this->matriculaService->forScope($redeId, $unidadeId, $regiaoId)),
                 'contratos' => count($this->contratoService->forScope($redeId, $unidadeId, $regiaoId)),

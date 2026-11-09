@@ -9,6 +9,7 @@ use App\Exceptions\ValidationException;
 use App\Repositories\AuditoriaRepository;
 use App\Repositories\PerfilRepository;
 use App\Repositories\PermissaoRepository;
+use App\Repositories\PlanoRedeRepository;
 use App\Repositories\RedeRepository;
 use App\Repositories\UnidadeRepository;
 use App\Repositories\UsuarioRepository;
@@ -43,7 +44,7 @@ final class AdminCrudTest extends IntegrationTestCase
 
     public function testRedeServiceCreatesValidatesAndUpdates(): void
     {
-        $service = new RedeService(new RedeRepository($this->database));
+        $service = new RedeService(new RedeRepository($this->database), new PlanoRedeRepository($this->database));
 
         $id = $service->create($this->redeData());
 

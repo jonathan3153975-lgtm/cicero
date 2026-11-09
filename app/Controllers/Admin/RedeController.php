@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Exceptions\ForbiddenException;
 use App\Exceptions\NotFoundException;
 use App\Exceptions\ValidationException;
+use App\Repositories\PlanoRedeRepository;
 use App\Repositories\RedeRepository;
 use App\Services\AuditService;
 use App\Services\RedeService;
@@ -22,6 +23,7 @@ final class RedeController extends AdminController
         Session $session,
         AuditService $audit,
         private readonly RedeRepository $redes,
+        private readonly PlanoRedeRepository $planosRede,
         private readonly RedeService $service
     ) {
         parent::__construct($view, $session, $audit);
@@ -48,6 +50,7 @@ final class RedeController extends AdminController
         return $this->render('admin.redes.form', array_merge($this->formState(), [
             'title' => 'Nova rede',
             'item' => null,
+            'planosRede' => $this->planosRede->all(),
         ]));
     }
 
@@ -78,6 +81,7 @@ final class RedeController extends AdminController
         return $this->render('admin.redes.form', array_merge($this->formState(), [
             'title' => 'Editar rede',
             'item' => $item,
+            'planosRede' => $this->planosRede->all(),
         ]));
     }
 

@@ -63,7 +63,8 @@ Acesse `http://localhost:8000`.
 - Contexto: `/contexto`
 - Configurações: `/configuracoes`
 - Administração: `/admin`, `/admin/redes`, `/admin/regioes`,
-  `/admin/unidades`, `/admin/pessoas`, `/admin/alunos`, `/admin/planos`,
+  `/admin/unidades`, `/admin/pessoas`, `/admin/modalidades`, `/admin/alunos`,
+  `/admin/planos`, `/admin/planos-rede`,
   `/admin/matriculas`, `/admin/contratos`, `/admin/turmas`, `/admin/frequencias`,
   `/admin/reservas`, `/admin/dispositivos`, `/admin/acessos`, `/admin/cobrancas`,
   `/admin/pagamentos`, `/admin/contas-pagar`, `/admin/contas-bancarias`,
@@ -96,6 +97,12 @@ essas credenciais em produção.
 - Turmas, horários, reservas, frequência e eventos de acesso (Onda 3).
 - Cobranças, pagamentos, contas a pagar, movimentos de caixa e conciliação
   bancária (Onda 4).
+- Menu agrupado em submenus, barra lateral recolhível e responsiva.
+- Cadastro de modalidades com escopo global/rede.
+- Formulário de Redes com máscaras, CEP automático e plano contratado.
+- Cadastro de planos de rede exclusivo do Superadmin, com descrição rica.
+- Tela global de carregamento com spinner e bloqueio contra duplo envio.
+- Formulário de Unidades com rede/região dependentes e código interno automático.
 - Deny by default, bloqueio de escalada e auditoria de ações administrativas.
 - CRUD administrativo de redes, regiões, unidades, usuários, perfis e vínculos.
 
@@ -107,7 +114,7 @@ composer format
 ```
 
 Os testes de integração usam o banco configurado no `.env`.
-Situação atual: 69 testes e 536 asserções aprovados.
+Situação atual: 73 testes e 552 asserções aprovados.
 
 ## Estrutura
 

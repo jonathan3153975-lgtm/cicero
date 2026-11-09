@@ -17,7 +17,7 @@
 
 | # | Pendência | Verificação futura |
 | --- | --- | --- |
-| 2.1 | Tela de modalidades | Verificar CRUD e escopo global/rede |
+| 2.1 | Tela de modalidades — concluída em 2026-11-09 | CRUD e escopo global/rede validados |
 | 2.2 | Tela de serviços adicionais | Verificar CRUD e vínculo com matrícula |
 | 2.3 | Tela de promoções | Verificar vigência e aplicação |
 | 2.4 | Tela de reajustes | Verificar histórico e impacto no contrato |

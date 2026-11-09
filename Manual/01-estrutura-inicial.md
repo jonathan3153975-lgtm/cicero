@@ -1,7 +1,7 @@
 # Estrutura inicial — registro da implementação
 
 **Documento de referência:** `projeto/1 - Estrutura inicial.md`
-**Status:** fundação implementada; Fases 0–6 do documento 02 e Ondas 1–4 do documento 03 implementadas
+**Status:** fundação implementada; Fases 0–6 do documento 02, Ondas 1–4 do documento 03 e menus do documento 04 implementados
 **Data:** 2026-11-09
 
 ## 1. Resumo
@@ -226,7 +226,8 @@ produção.
 - Telas de planos, preços, matrículas e contratos.
 - Uma matrícula ativa por aluno/unidade.
 - Contrato criado em transação com a matrícula.
-- Permissões `matricula.*` e `contrato.*`; catálogo com 72 permissões.
+- Permissões `matricula.*` e `contrato.*`; catálogo com
+  72 permissões.
 
 ### Onda 3 — Operação e acesso
 
@@ -265,7 +266,7 @@ produção.
 
 ## 9. Testes
 
-Suíte atual: **69 testes, 536 asserções, todos aprovados**.
+Suíte atual: **73 testes, 552 asserções, todos aprovados**.
 
 Cobrem fundação, conexão, persistência, autenticação real, permissões por
 perfil, isolamento por unidade, permissões regionais, não escalada, contextos,

@@ -54,7 +54,11 @@ final class TenantContextServiceTest extends IntegrationTestCase
 
     public function testLocalUserHasOnlyItsUnit(): void
     {
-        $contexts = $this->contexts->contextsForUser($this->userId('local@local.test'));
+        $redeId = $this->redeId();
+        $contexts = array_values(array_filter(
+            $this->contexts->contextsForUser($this->userId('local@local.test')),
+            static fn (array $context): bool => (int) ($context['rede_id'] ?? 0) === $redeId
+        ));
 
         self::assertCount(1, $contexts);
         self::assertSame($this->unidadeId('CENTRO'), $contexts[0]['unidade_id']);

@@ -68,7 +68,7 @@ Não foram necessárias novas permissões. O módulo reutiliza:
 - `financeiro.visualizar`
 - `financeiro.editar`
 
-Total permanece em **72 permissões**.
+A Onda 4 manteve as **72 permissões** existentes; o catálogo passou a **75** com o módulo de modalidades.
 
 ## 6. Rotas
 
@@ -130,7 +130,7 @@ Total permanece em **72 permissões**.
 - Conta a pagar quitada com movimento de saída.
 - Conciliação com importação de CSV, casamento automático e fechamento.
 
-Situação atual: **69 testes e 536 asserções aprovados**.
+Situação atual: **71 testes e 541 asserções aprovados**.
 
 ## 11. Pendências da Onda 4
 

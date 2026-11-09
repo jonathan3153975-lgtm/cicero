@@ -30,6 +30,7 @@ administração.
 | `0029_create_financeiro_base_tables.php` | `contas_bancarias`, `formas_pagamento`, `centros_custo`, `fornecedores` |
 | `0030_create_cobrancas_pagamentos_tables.php` | `cobrancas`, `cobranca_itens`, `pagamentos`, `pagamento_alocacoes`, `estornos` |
 | `0031_create_contas_pagar_conciliacao_tables.php` | `renegociacoes`, `renegociacao_itens`, `contas_pagar`, `movimentos_caixa`, `conciliacoes_bancarias`, `conciliacao_itens` |
+| `0032_create_planos_rede_table.php` | `planos_rede`, `redes.plano_rede_id` |
 
 A migration `0001_create_health_checks_table.php` pertence à fundação.
 
@@ -82,7 +83,7 @@ O catálogo é carregado por seed a partir de
 - `cliente`, `plano`, `financeiro`, `relatorio`, `auditoria`.
 - `contexto`, `dashboard`, `configuracao`.
 
-Total atual: 72 permissões.
+Total atual: 78 permissões.
 
 ## 6. Resolução de permissões
 
@@ -128,7 +129,7 @@ composer seed
 
 O seed é idempotente. Ele cria/atualiza:
 
-- 72 permissões.
+- 78 permissões.
 - 8 perfis de sistema.
 - Rede demonstração, região Metropolitana e unidades Centro e Shopping.
 - Usuários de demonstração com senha `Admin@123`.
@@ -176,7 +177,7 @@ A suíte cobre:
 - isolamento entre unidades e recálculo imediato de permissões;
 - registro e consulta de auditoria.
 
-Situação atual: 69 testes e 536 asserções aprovados.
+Situação atual: 73 testes e 552 asserções aprovados.
 
 ## 12. Administração
 
@@ -224,7 +225,7 @@ Aplicadas em 2026-11-08:
 - Migration  015_normalize_audit_scope.php para corrigir escopos históricos.
 - Listagem de perfis filtrada pelo nível do ator.
 - Edição de perfil de nível superior retorna 403.
-- Suíte atual: 69 testes e 536 asserções.
+- Suíte atual: 73 testes e 552 asserções.
 ## 16. Prioridades 2–3 — escopo de perfis e regiões
 
 Aplicadas em 2026-11-08:
@@ -241,7 +242,7 @@ Aplicadas em 2026-11-08:
 - Criação de unidade em contexto regional vincula a unidade à região.
 - egiao.criar/egiao.editar removidas do Admin Regional.
 - Dados de teste removidos; ambiente com 1 rede, 1 região, 2 unidades, 8 usuários e 8 perfis.
-- Suíte atual: 69 testes e 536 asserções.
+- Suíte atual: 73 testes e 552 asserções.
 ## 18. Onda 1 — Pessoas e alunos
 
 Implementada em 2026-11-09:
@@ -256,7 +257,7 @@ Implementada em 2026-11-09:
 - Serviços PessoaService e AlunoService com validação de CPF/CNPJ,
   responsáveis, contatos e endereços.
 - Telas de pessoas, alunos e responsáveis.
-- Suíte atual: 69 testes e 536 asserções.
+- Suíte atual: 73 testes e 552 asserções.
 
 Pendências da onda: upload/tela de documentos, tela de consentimentos, tela de
 restrições de saúde e dados de demonstração de alunos.
@@ -274,7 +275,7 @@ Implementada em 2026-11-09:
   contrato criado em transação, escopo por rede/unidade/região.
 - Catálogo ampliado para 72 permissões com matricula.* e contrato.*.
 - Modalidades padrão semeadas.
-- Suíte atual: 69 testes e 536 asserções.
+- Suíte atual: 73 testes e 552 asserções.
 
 Pendências: telas de modalidades, serviços, promoções, reajustes, descontos e
 transferências; renovação automática e cobranças na Onda 4.
@@ -292,7 +293,7 @@ Implementada em 2026-11-09:
   reserva no dia do horário, capacidade e isolamento por unidade.
 - Catálogo ampliado para 72 permissões com 	urma.*, requencia.*,
   reserva.*, dispositivo.*, evento_acesso.* e ocorrencia.*.
-- Suíte atual: 69 testes e 536 asserções.
+- Suíte atual: 73 testes e 552 asserções.
 
 Pendências: tela de vínculo turma/aluno, professor no horário, tela de
 ocorrências, registro manual de eventos e integração real com catracas.
@@ -316,10 +317,22 @@ Implementada em 2026-11-09:
   conciliação automática por data/tipo/valor e escopo por rede/unidade/região.
 - Seeds: formas de pagamento globais e conta "Caixa Interno" + centro "Geral"
   por unidade.
-- Catálogo permanece com 72 permissões, reutilizando financeiro.visualizar e
+- Catálogo passa a 78 permissões com modalidades e planos de rede, mantendo financeiro.visualizar e
   financeiro.editar.
-- Suíte atual: 69 testes e 536 asserções.
+- Suíte atual: 73 testes e 552 asserções.
 
 Pendências: geração recorrente em lote, integração real de PIX/boleto,
 tela de fornecedores, tela de renegociação, upload OFX/CSV e relatórios
 financeiros.
+## 22. Planos de rede
+
+Implementado em 2026-11-09:
+
+- Tabela planos_rede com nome único, descrição rica sanitizada e status.
+- Coluna redes.plano_rede_id com chave estrangeira para planos_rede.
+- CRUD /admin/planos-rede exclusivo do Superadmin.
+- Permissões plano_rede.visualizar, plano_rede.criar e plano_rede.editar.
+- Seeds: DEMO, Básico, Profissional e Enterprise; redes antigas vinculadas por nome.
+- Formulário de Redes reorganizado em linhas/colunas, com máscaras de CNPJ, telefone e CEP, além de autopreenchimento via ViaCEP.
+- Catálogo atual: 78 permissões.
+- Suíte atual: 73 testes e 552 asserções.

@@ -8,6 +8,10 @@ return [
     ['slug' => 'rede.bloquear', 'modulo' => 'rede', 'acao' => 'bloquear', 'descricao' => 'Bloquear redes'],
     ['slug' => 'rede.visualizar', 'modulo' => 'rede', 'acao' => 'visualizar', 'descricao' => 'Visualizar redes'],
 
+    ['slug' => 'plano_rede.visualizar', 'modulo' => 'plano_rede', 'acao' => 'visualizar', 'descricao' => 'Visualizar planos de rede'],
+    ['slug' => 'plano_rede.criar', 'modulo' => 'plano_rede', 'acao' => 'criar', 'descricao' => 'Criar planos de rede'],
+    ['slug' => 'plano_rede.editar', 'modulo' => 'plano_rede', 'acao' => 'editar', 'descricao' => 'Editar planos de rede'],
+
     ['slug' => 'regiao.criar', 'modulo' => 'regiao', 'acao' => 'criar', 'descricao' => 'Criar regiões'],
     ['slug' => 'regiao.editar', 'modulo' => 'regiao', 'acao' => 'editar', 'descricao' => 'Editar regiões'],
     ['slug' => 'regiao.visualizar', 'modulo' => 'regiao', 'acao' => 'visualizar', 'descricao' => 'Visualizar regiões'],
@@ -84,6 +88,10 @@ return [
     ['slug' => 'cliente.criar', 'modulo' => 'cliente', 'acao' => 'criar', 'descricao' => 'Criar clientes'],
     ['slug' => 'cliente.editar', 'modulo' => 'cliente', 'acao' => 'editar', 'descricao' => 'Editar clientes'],
     ['slug' => 'cliente.visualizar', 'modulo' => 'cliente', 'acao' => 'visualizar', 'descricao' => 'Visualizar clientes'],
+
+    ['slug' => 'modalidade.visualizar', 'modulo' => 'modalidade', 'acao' => 'visualizar', 'descricao' => 'Visualizar modalidades'],
+    ['slug' => 'modalidade.criar', 'modulo' => 'modalidade', 'acao' => 'criar', 'descricao' => 'Criar modalidades'],
+    ['slug' => 'modalidade.editar', 'modulo' => 'modalidade', 'acao' => 'editar', 'descricao' => 'Editar modalidades'],
 
     ['slug' => 'plano.criar', 'modulo' => 'plano', 'acao' => 'criar', 'descricao' => 'Criar planos'],
     ['slug' => 'plano.editar', 'modulo' => 'plano', 'acao' => 'editar', 'descricao' => 'Editar planos'],

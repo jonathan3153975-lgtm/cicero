@@ -47,6 +47,18 @@ final class RegiaoRepository extends Repository
         $statement->execute(['regiao_id' => $regiaoId, 'unidade_id' => $unidadeId]);
     }
 
+    public function syncUnidade(int $unidadeId, ?int $regiaoId): void
+    {
+        $delete = $this->pdo()->prepare('DELETE FROM regiao_unidade WHERE unidade_id = :unidade_id');
+        $delete->execute(['unidade_id' => $unidadeId]);
+
+        if ($regiaoId === null) {
+            return;
+        }
+
+        $this->linkUnidade($regiaoId, $unidadeId);
+    }
+
     public function all(): array
     {
         $statement = $this->pdo()->query(

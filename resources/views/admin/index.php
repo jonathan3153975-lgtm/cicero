@@ -6,6 +6,7 @@ $cards = [
     ['permission' => 'unidade.visualizar', 'label' => 'Unidades', 'value' => $counts['unidades'], 'href' => '/admin/unidades'],
     ['permission' => 'pessoa.visualizar', 'label' => 'Pessoas', 'value' => $counts['pessoas'], 'href' => '/admin/pessoas'],
     ['permission' => 'aluno.visualizar', 'label' => 'Alunos', 'value' => $counts['alunos'], 'href' => '/admin/alunos'],
+    ['permission' => 'modalidade.visualizar', 'label' => 'Modalidades', 'value' => $counts['modalidades'], 'href' => '/admin/modalidades'],
     ['permission' => 'plano.visualizar', 'label' => 'Planos', 'value' => $counts['planos'], 'href' => '/admin/planos'],
     ['permission' => 'matricula.visualizar', 'label' => 'Matrículas', 'value' => $counts['matriculas'], 'href' => '/admin/matriculas'],
     ['permission' => 'contrato.visualizar', 'label' => 'Contratos', 'value' => $counts['contratos'], 'href' => '/admin/contratos'],

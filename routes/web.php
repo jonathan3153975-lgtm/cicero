@@ -14,11 +14,13 @@ use App\Controllers\Admin\DispositivoAcessoController;
 use App\Controllers\Admin\EventoAcessoController;
 use App\Controllers\Admin\FrequenciaController;
 use App\Controllers\Admin\MatriculaController;
+use App\Controllers\Admin\ModalidadeController;
 use App\Controllers\Admin\PagamentoController;
 use App\Controllers\Admin\PerfilController;
 use App\Controllers\Admin\PermissaoController;
 use App\Controllers\Admin\PessoaController;
 use App\Controllers\Admin\PlanoController;
+use App\Controllers\Admin\PlanoRedeController;
 use App\Controllers\Admin\PlanoPrecoController;
 use App\Controllers\Admin\RedeController;
 use App\Controllers\Admin\RegiaoController;
@@ -58,6 +60,11 @@ return [
 
     ['GET', '/admin', [AdminDashboardController::class, 'index'], $admin('usuario.visualizar')],
 
+    ['GET', '/admin/planos-rede', [PlanoRedeController::class, 'index'], $admin('plano_rede.visualizar')],
+    ['GET', '/admin/planos-rede/novo', [PlanoRedeController::class, 'create'], $admin('plano_rede.criar')],
+    ['POST', '/admin/planos-rede', [PlanoRedeController::class, 'store'], $admin('plano_rede.criar')],
+    ['GET', '/admin/planos-rede/{id}/editar', [PlanoRedeController::class, 'edit'], $admin('plano_rede.editar')],
+    ['POST', '/admin/planos-rede/{id}', [PlanoRedeController::class, 'update'], $admin('plano_rede.editar')],
     ['GET', '/admin/redes', [RedeController::class, 'index'], $admin('rede.visualizar')],
     ['GET', '/admin/redes/novo', [RedeController::class, 'create'], $admin('rede.criar')],
     ['POST', '/admin/redes', [RedeController::class, 'store'], $admin('rede.criar')],
@@ -79,6 +86,7 @@ return [
     ['GET', '/admin/usuarios', [UsuarioController::class, 'index'], $admin('usuario.visualizar')],
     ['GET', '/admin/usuarios/novo', [UsuarioController::class, 'create'], $admin('usuario.criar')],
     ['POST', '/admin/usuarios', [UsuarioController::class, 'store'], $admin('usuario.criar')],
+    ['GET', '/admin/usuarios/buscar-pessoas', [UsuarioController::class, 'searchPessoas'], $admin('usuario.visualizar')],
     ['GET', '/admin/usuarios/{id}/editar', [UsuarioController::class, 'edit'], $admin('usuario.editar')],
     ['POST', '/admin/usuarios/{id}', [UsuarioController::class, 'update'], $admin('usuario.editar')],
 
@@ -98,6 +106,11 @@ return [
     ['POST', '/admin/alunos/{id}/responsaveis/{responsavelId}/remover', [AlunoController::class, 'removeResponsavel'], $admin('responsavel.editar')],
 
 
+    ['GET', '/admin/modalidades', [ModalidadeController::class, 'index'], $admin('modalidade.visualizar')],
+    ['GET', '/admin/modalidades/nova', [ModalidadeController::class, 'create'], $admin('modalidade.criar')],
+    ['POST', '/admin/modalidades', [ModalidadeController::class, 'store'], $admin('modalidade.criar')],
+    ['GET', '/admin/modalidades/{id}/editar', [ModalidadeController::class, 'edit'], $admin('modalidade.editar')],
+    ['POST', '/admin/modalidades/{id}', [ModalidadeController::class, 'update'], $admin('modalidade.editar')],
     ['GET', '/admin/planos', [PlanoController::class, 'index'], $admin('plano.visualizar')],
     ['GET', '/admin/planos/novo', [PlanoController::class, 'create'], $admin('plano.criar')],
     ['POST', '/admin/planos', [PlanoController::class, 'store'], $admin('plano.criar')],

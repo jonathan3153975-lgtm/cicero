@@ -22,6 +22,11 @@ final class UnidadeService
     public function create(array $data): int
     {
         $data = $this->normalize($data);
+
+        if ($data['codigo_interno'] === '') {
+            $data['codigo_interno'] = $this->generateCode($data['rede_id'], $data['nome']);
+        }
+
         $this->validate($data);
 
         if ($this->unidades->findByRedeAndCode($data['rede_id'], $data['codigo_interno']) !== null) {
@@ -34,6 +39,11 @@ final class UnidadeService
     public function update(int $id, array $data): void
     {
         $data = $this->normalize($data);
+
+        if ($data['codigo_interno'] === '') {
+            $data['codigo_interno'] = $this->generateCode($data['rede_id'], $data['nome'], $id);
+        }
+
         $this->validate($data);
 
         $existing = $this->unidades->findByRedeAndCode($data['rede_id'], $data['codigo_interno']);
@@ -51,7 +61,9 @@ final class UnidadeService
             'rede_id' => (int) ($data['rede_id'] ?? 0),
             'nome' => trim((string) ($data['nome'] ?? '')),
             'codigo_interno' => strtoupper(trim((string) ($data['codigo_interno'] ?? ''))),
-            'situacao' => strtoupper(trim((string) ($data['situacao'] ?? 'ATIVA'))),
+            'situacao' => array_key_exists('ativo', $data)
+                ? ((string) $data['ativo'] === '1' ? 'ATIVA' : 'INATIVA')
+                : strtoupper(trim((string) ($data['situacao'] ?? 'ATIVA'))),
             'cep' => trim((string) ($data['cep'] ?? '')),
             'logradouro' => trim((string) ($data['logradouro'] ?? '')),
             'numero' => trim((string) ($data['numero'] ?? '')),
@@ -90,6 +102,12 @@ final class UnidadeService
             $errors['estado'][] = 'Informe a sigla do estado com 2 letras.';
         }
 
+        $cep = preg_replace('/\D/', '', $data['cep']) ?? '';
+
+        if ($data['cep'] !== '' && strlen($cep) !== 8) {
+            $errors['cep'][] = 'Informe um CEP válido.';
+        }
+
         if (
             $data['capacidade_maxima'] !== ''
             && (!ctype_digit($data['capacidade_maxima']) || (int) $data['capacidade_maxima'] < 0)
@@ -111,6 +129,39 @@ final class UnidadeService
 
         if ($this->redes->findById($data['rede_id']) === null) {
             throw new ValidationException(['rede_id' => ['Rede inexistente.']]);
+        }
+    }
+
+    private function generateCode(int $redeId, string $nome, ?int $ignoreId = null): string
+    {
+        $base = mb_strtoupper($nome, 'UTF-8');
+        $base = strtr($base, [
+            'Á' => 'A', 'À' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A',
+            'É' => 'E', 'È' => 'E', 'Ê' => 'E', 'Ë' => 'E',
+            'Í' => 'I', 'Ì' => 'I', 'Î' => 'I', 'Ï' => 'I',
+            'Ó' => 'O', 'Ò' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O',
+            'Ú' => 'U', 'Ù' => 'U', 'Û' => 'U', 'Ü' => 'U',
+            'Ç' => 'C',
+        ]);
+        $base = preg_replace('/[^A-Z0-9]+/', '-', $base) ?? '';
+        $base = trim(substr($base, 0, 30), '-');
+
+        if ($base === '') {
+            $base = 'UNIDADE';
+        }
+
+        $code = $base;
+        $suffix = 2;
+
+        while (true) {
+            $existing = $this->unidades->findByRedeAndCode($redeId, $code);
+
+            if ($existing === null || ($ignoreId !== null && (int) $existing['id'] === $ignoreId)) {
+                return $code;
+            }
+
+            $code = substr($base, 0, 27) . '-' . $suffix;
+            $suffix++;
         }
     }
 }

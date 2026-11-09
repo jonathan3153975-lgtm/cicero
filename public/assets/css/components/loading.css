@@ -1,0 +1,59 @@
+.app-loading {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-5);
+    background: rgba(6, 10, 16, 0.68);
+    backdrop-filter: blur(3px);
+}
+
+.app-loading[hidden] {
+    display: none;
+}
+
+.app-loading__panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-4);
+    min-width: 180px;
+    padding: var(--spacing-5) var(--spacing-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-md);
+}
+
+.app-loading__spinner {
+    width: 42px;
+    height: 42px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--brand-primary);
+    border-radius: 50%;
+    animation: app-loading-spin 0.75s linear infinite;
+}
+
+.app-loading__message {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+body.is-loading {
+    cursor: progress;
+}
+
+@keyframes app-loading-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.btn.is-loading {
+    pointer-events: none;
+    opacity: 0.7;
+}

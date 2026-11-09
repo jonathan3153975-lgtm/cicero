@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Exceptions\ValidationException;
+use App\Repositories\PlanoRedeRepository;
 use App\Repositories\RedeRepository;
 use App\Validators\Validator;
 
@@ -12,14 +13,17 @@ final class RedeService
 {
     private const STATUSES = ['ATIVA', 'SUSPENSA', 'EM_IMPLANTACAO', 'CANCELADA'];
 
-    public function __construct(private readonly RedeRepository $redes)
-    {
+    public function __construct(
+        private readonly RedeRepository $redes,
+        private readonly PlanoRedeRepository $planosRede
+    ) {
     }
 
     public function create(array $data): int
     {
         $data = $this->normalize($data);
         $this->validate($data);
+        $data = $this->applyPlan($data);
 
         if ($this->redes->findByCnpj($data['cnpj']) !== null) {
             throw new ValidationException(['cnpj' => ['Já existe uma rede com este CNPJ.']]);
@@ -32,6 +36,7 @@ final class RedeService
     {
         $data = $this->normalize($data);
         $this->validate($data);
+        $data = $this->applyPlan($data);
 
         $existing = $this->redes->findByCnpj($data['cnpj']);
 
@@ -59,6 +64,7 @@ final class RedeService
             'estado' => strtoupper(trim((string) ($data['estado'] ?? ''))),
             'status' => strtoupper(trim((string) ($data['status'] ?? 'ATIVA'))),
             'plano_contratado' => trim((string) ($data['plano_contratado'] ?? '')),
+            'plano_rede_id' => ($data['plano_rede_id'] ?? '') !== '' ? (int) $data['plano_rede_id'] : null,
         ];
     }
 
@@ -73,10 +79,35 @@ final class RedeService
             ->cnpj('cnpj')
             ->email('email')
             ->maxLength('email', 180)
+            ->maxLength('estado', 2)
             ->in('status', self::STATUSES);
 
-        if ($validator->fails()) {
-            throw new ValidationException($validator->errors());
+        $errors = $validator->errors();
+        $cep = preg_replace('/\D/', '', $data['cep']) ?? '';
+
+        if ($data['cep'] !== '' && strlen($cep) !== 8) {
+            $errors['cep'][] = 'Informe um CEP válido.';
         }
+
+        if ($errors !== []) {
+            throw new ValidationException($errors);
+        }
+    }
+
+    private function applyPlan(array $data): array
+    {
+        if ($data['plano_rede_id'] === null) {
+            return $data;
+        }
+
+        $plano = $this->planosRede->findById((int) $data['plano_rede_id']);
+
+        if ($plano === null) {
+            throw new ValidationException(['plano_rede_id' => ['Plano de rede inválido.']]);
+        }
+
+        $data['plano_contratado'] = (string) $plano['nome'];
+
+        return $data;
     }
 }

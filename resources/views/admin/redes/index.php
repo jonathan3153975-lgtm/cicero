@@ -18,6 +18,7 @@
                     <th scope="col">Razão social</th>
                     <th scope="col">CNPJ</th>
                     <th scope="col">Cidade</th>
+                    <th scope="col">Plano</th>
                     <th scope="col">Status</th>
                     <th scope="col">Ações</th>
                 </tr>
@@ -29,6 +30,7 @@
                         <td><?= e($rede['razao_social']) ?></td>
                         <td><?= e($rede['cnpj']) ?></td>
                         <td><?= e($rede['cidade'] ?? '—') ?></td>
+                        <td><?= e($rede['plano_nome'] ?? $rede['plano_contratado'] ?? '—') ?></td>
                         <td><span class="badge <?= $rede['status'] === 'ATIVA' ? 'badge--success' : 'badge--warning' ?>"><?= e($rede['status']) ?></span></td>
                         <td class="table__actions">
                             <?php if ($canEdit): ?>
@@ -40,7 +42,7 @@
                     </tr>
                 <?php endforeach; ?>
                 <?php if ($redes === []): ?>
-                    <tr><td colspan="6" class="text-muted">Nenhuma rede encontrada.</td></tr>
+                    <tr><td colspan="7" class="text-muted">Nenhuma rede encontrada.</td></tr>
                 <?php endif; ?>
             </tbody>
         </table>

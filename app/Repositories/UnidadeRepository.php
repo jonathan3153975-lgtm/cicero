@@ -77,13 +77,13 @@ final class UnidadeRepository extends Repository
     {
         $statement = $this->pdo()->prepare(
             'SELECT u.id, u.rede_id, u.nome, u.codigo_interno, u.situacao, u.cidade, u.estado,'
-            . ' r.nome_fantasia AS rede_nome'
+            . ' r.nome_fantasia AS rede_nome, ? AS regiao_id'
             . ' FROM unidades u'
             . ' INNER JOIN regiao_unidade ru ON ru.unidade_id = u.id'
             . ' INNER JOIN redes r ON r.id = u.rede_id'
-            . ' WHERE ru.regiao_id = :regiao_id ORDER BY u.nome ASC'
+            . ' WHERE ru.regiao_id = ? ORDER BY u.nome ASC'
         );
-        $statement->execute(['regiao_id' => $regiaoId]);
+        $statement->execute([$regiaoId, $regiaoId]);
 
         return $statement->fetchAll();
     }

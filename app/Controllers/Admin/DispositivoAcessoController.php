@@ -7,6 +7,7 @@ namespace App\Controllers\Admin;
 use App\Exceptions\NotFoundException;
 use App\Exceptions\ValidationException;
 use App\Repositories\DispositivoAcessoRepository;
+use App\Repositories\RegiaoRepository;
 use App\Repositories\UnidadeRepository;
 use App\Services\AcessoService;
 use App\Services\AuditService;
@@ -23,7 +24,8 @@ final class DispositivoAcessoController extends AdminController
         AuditService $audit,
         private readonly DispositivoAcessoRepository $dispositivos,
         private readonly AcessoService $service,
-        private readonly UnidadeRepository $unidades
+        private readonly UnidadeRepository $unidades,
+        private readonly RegiaoRepository $regioes
     ) {
         parent::__construct($view, $session, $audit);
     }
@@ -42,11 +44,18 @@ final class DispositivoAcessoController extends AdminController
 
     public function create(Request $request): Response
     {
+        $redeId = $this->contextRedeId();
+        $regiaoId = $this->contextRegiaoId();
+        $unidadeId = $this->contextUnidadeId();
+
         return $this->render('admin.dispositivos.form', array_merge($this->formState(), [
             'title' => 'Novo dispositivo',
             'item' => null,
             'unidades' => $this->unidadeOptions(),
-            'currentUnidadeId' => $this->contextUnidadeId(),
+            'regioes' => $this->regiaoOptions(),
+            'currentRedeId' => $redeId,
+            'currentRegiaoId' => $regiaoId,
+            'currentUnidadeId' => $unidadeId,
         ]));
     }
 
@@ -77,11 +86,18 @@ final class DispositivoAcessoController extends AdminController
     {
         $item = $this->findScoped((int) $request->routeParam('id'));
 
+        $redeId = $this->contextRedeId();
+        $regiaoId = $this->contextRegiaoId();
+        $unidadeId = $this->contextUnidadeId();
+
         return $this->render('admin.dispositivos.form', array_merge($this->formState(), [
             'title' => 'Editar dispositivo',
             'item' => $item,
             'unidades' => $this->unidadeOptions(),
-            'currentUnidadeId' => $this->contextUnidadeId(),
+            'regioes' => $this->regiaoOptions(),
+            'currentRedeId' => $redeId,
+            'currentRegiaoId' => $regiaoId,
+            'currentUnidadeId' => $unidadeId,
         ]));
     }
 
@@ -144,5 +160,16 @@ final class DispositivoAcessoController extends AdminController
         $redeId = $this->contextRedeId();
 
         return $redeId !== null ? $this->unidades->forRede($redeId) : $this->unidades->all();
+    }
+
+    private function regiaoOptions(): array
+    {
+        $redeId = $this->contextRedeId();
+
+        if ($redeId === null) {
+            return $this->regioes->all();
+        }
+
+        return $this->regioes->forRede($redeId);
     }
 }

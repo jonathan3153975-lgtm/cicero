@@ -46,7 +46,8 @@ final class UsuarioService
     public function createWithMembership(
         array $data,
         ?int $redeId = null,
-        ?int $unidadeId = null
+        ?int $unidadeId = null,
+        ?int $pessoaId = null
     ): int {
         $normalized = $this->normalize($data);
         $this->validate($normalized, true);
@@ -75,7 +76,8 @@ final class UsuarioService
             $normalized['nome'],
             $normalized['email'],
             password_hash($normalized['password'], PASSWORD_DEFAULT),
-            $normalized['status']
+            $normalized['status'],
+            $pessoaId
         );
 
         if ($redeId !== null) {

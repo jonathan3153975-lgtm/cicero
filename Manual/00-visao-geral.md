@@ -1,7 +1,7 @@
 # Visão geral
 
 **Projeto:** Plataforma Fitness — sistema de gestão de redes de academias
-**Versão:** 1.7 (fundação + Fases 0–6 + correções 1–3 + Ondas 1–4)
+**Versão:** 1.9 (fundação + Fases 0–6 + correções 1–3 + Ondas 1–4 + menus + Redes/planos)
 **Stack:** PHP 8.2+ · MariaDB · HTML5 · CSS3 · JavaScript (ES modules)
 
 ## Objetivo
@@ -35,6 +35,10 @@ e comunicação) ainda não foram implementados.
 - Administração de redes, regiões, unidades, usuários, perfis e vínculos.
 - Auditoria de ações administrativas relevantes.
 - Financeiro com cobranças, pagamentos, contas a pagar e conciliação bancária.
+- Menu agrupado em submenus, recolhível no desktop e fechado por padrão no mobile.
+- Formulário de Redes em linhas/colunas, com máscaras, CEP automático e planos de rede.
+- Formulário de Unidades com rede/região dependentes, código automático e endereço completo.
+- Camada global de carregamento com spinner, bloqueio de tela e anti-duplo clique.
 - Testes unitários e de integração com PHPUnit.
 - Documentação funcional e técnica.
 
@@ -106,7 +110,7 @@ Application::handle()
 - Banco `academia` criado no MariaDB, migrations aplicadas e persistência
   validada.
 - API `GET /api/v1/health` retorna `database: ok`.
-- Suíte com 69 testes e 536 asserções aprovados.
+- Suíte com 73 testes e 552 asserções aprovados.
 - Fluxo web validado: login, contexto, permissões, administração e auditoria.
 - CRUD administrativo e anti-escalada validados em testes e no fluxo web.
 - Prioridades 2–3 validadas: perfis com escopo de rede, matriz de concessão,
@@ -119,13 +123,14 @@ Application::handle()
   eventos de acesso.
 - Onda 4 validada: cobranças geradas de matrículas, pagamentos com estorno,
   contas a pagar, movimentos de caixa e conciliação bancária por CSV.
+- Menu agrupado validado com submenus, recolhimento no desktop e gaveta de
+  `90vw` no mobile; módulo de modalidades criado e validado.
 
 ## Pendências conhecidas
 
 - Onda 1: upload/tela de documentos, tela de consentimentos, tela de restrições
   de saúde e dados de demonstração de alunos.
-- Onda 2: telas de modalidades, serviços, promoções, reajustes, descontos e
-  transferências.
+- Onda 2: telas de serviços, promoções, reajustes, descontos e transferências.
 - Onda 3: vínculo turma/aluno, professor no horário, tela de ocorrências,
   registro manual de eventos e integração real com catracas.
 - Onda 4: geração recorrente automática de mensalidades, integração real de
@@ -144,6 +149,9 @@ Application::handle()
 - `05-onda-2-catalogo-matriculas.md` — registro da Onda 2
 - `06-onda-3-operacao-acesso.md` — registro da Onda 3
 - `07-onda-4-financeiro.md` — registro da Onda 4
+- `08-menus-submenus.md` — menu agrupado, barra recolhível e módulo de modalidades
+- `09-redes-layout-planos-rede.md` — formulário de redes, máscaras/CEP e planos de rede
+- `10-unidade-layout.md` — formulário de unidades, vínculo com região e código automático
 - `pendencias-ondas-1-2.md` — pendências registradas das Ondas 1 e 2
 - `pendencias-onda-3.md` — pendências registradas da Onda 3
 - `pendencias-onda-4.md` — pendências registradas da Onda 4

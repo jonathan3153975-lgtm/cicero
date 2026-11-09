@@ -13,6 +13,7 @@
 | 3.6 | Catraca como fonte de ponto de funcionários | Implementar junto da Onda 6 (RH) |
 | 3.7 | Frequência automática por evento de acesso | Definir regra e evitar duplicidade |
 | 3.8 | Filtros e relatórios de reservas/frequência | Verificar filtros por período, turma e unidade |
+| 3.9 | **Envio de senha temporária por e-mail no cadastro de usuário** | Implementar geração de senha temporária, envio por e-mail e validação/obrigatoriedade de troca no primeiro login. Substituir campo de senha manual no formulário de usuário. |
 
 ## Observação
 

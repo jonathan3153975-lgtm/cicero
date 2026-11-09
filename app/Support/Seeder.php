@@ -27,6 +27,7 @@ final class Seeder
         $this->seedDemo($demo);
         $this->seedModalities();
         $this->seedFinanceiro();
+        $this->seedRedePlans();
 
         return [
             'permissoes' => count($permissions),
@@ -179,6 +180,43 @@ final class Seeder
                 'unidade_id' => (int) $unidade['id'],
             ]);
         }
+    }
+
+    private function seedRedePlans(): void
+    {
+        $planos = [
+            [
+                'nome' => 'DEMO',
+                'descricao' => '<p>Plano de demonstração para avaliação da plataforma.</p>',
+            ],
+            [
+                'nome' => 'Básico',
+                'descricao' => '<p>Gestão de uma unidade, cadastros essenciais, matrículas e financeiro básico.</p>',
+            ],
+            [
+                'nome' => 'Profissional',
+                'descricao' => '<p>Múltiplas unidades, turmas, frequência, controle de acesso e conciliação bancária.</p>',
+            ],
+            [
+                'nome' => 'Enterprise',
+                'descricao' => '<p>Rede completa com módulos avançados, relatórios e integrações.</p>',
+            ],
+        ];
+
+        $insert = $this->pdo->prepare(
+            'INSERT INTO planos_rede (nome, descricao, status) VALUES (:nome, :descricao, \'ATIVO\')'
+            . ' ON DUPLICATE KEY UPDATE descricao = VALUES(descricao), status = \'ATIVO\''
+        );
+
+        foreach ($planos as $plano) {
+            $insert->execute(['nome' => $plano['nome'], 'descricao' => $plano['descricao']]);
+        }
+
+        $this->pdo->exec(
+            'UPDATE redes r SET r.plano_rede_id = ('
+            . 'SELECT p.id FROM planos_rede p WHERE p.nome = r.plano_contratado LIMIT 1'
+            . ') WHERE r.plano_rede_id IS NULL AND r.plano_contratado IS NOT NULL'
+        );
     }
 
     private function seedDemo(array $demo): void

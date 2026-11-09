@@ -46,6 +46,8 @@ final class UnidadeController extends AdminController
             'title' => 'Nova unidade',
             'item' => null,
             'redes' => $this->redeOptions(),
+            'regioes' => $this->regiaoOptions(),
+            'regiaoSelecionada' => $this->contextRegiaoId(),
             'isPlatform' => $this->isPlatformContext(),
             'currentRedeId' => $this->contextRedeId(),
         ]));
@@ -62,12 +64,15 @@ final class UnidadeController extends AdminController
             ], $data);
         }
 
+        $regiaoError = $this->regionError((int) $data['rede_id'], $data['regiao_id'] ?? null);
+
+        if ($regiaoError !== null) {
+            return $this->backWithErrors('/admin/unidades/novo', $regiaoError, $data);
+        }
+
         try {
             $id = $this->service->create($data);
-
-            if ($this->contextRegiaoId() !== null) {
-                $this->regioes->linkUnidade((int) $this->contextRegiaoId(), $id);
-            }
+            $this->regioes->syncUnidade($id, $this->regionId($data['regiao_id'] ?? null));
         } catch (ValidationException $exception) {
             return $this->backWithErrors('/admin/unidades/novo', $exception->getErrors(), $data);
         }
@@ -86,6 +91,8 @@ final class UnidadeController extends AdminController
             'title' => 'Editar unidade',
             'item' => $item,
             'redes' => $this->redeOptions(),
+            'regioes' => $this->regiaoOptions(),
+            'regiaoSelecionada' => $this->selectedRegion((int) $item['id']),
             'isPlatform' => $this->isPlatformContext(),
             'currentRedeId' => $this->contextRedeId(),
         ]));
@@ -104,8 +111,15 @@ final class UnidadeController extends AdminController
             ], $data);
         }
 
+        $regiaoError = $this->regionError((int) $data['rede_id'], $data['regiao_id'] ?? null);
+
+        if ($regiaoError !== null) {
+            return $this->backWithErrors('/admin/unidades/' . $id . '/editar', $regiaoError, $data);
+        }
+
         try {
             $this->service->update($id, $data);
+            $this->regioes->syncUnidade($id, $this->regionId($data['regiao_id'] ?? null));
         } catch (ValidationException $exception) {
             return $this->backWithErrors('/admin/unidades/' . $id . '/editar', $exception->getErrors(), $data);
         }
@@ -130,6 +144,46 @@ final class UnidadeController extends AdminController
         }
 
         return (int) $input;
+    }
+
+    private function regiaoOptions(): array
+    {
+        if ($this->isPlatformContext()) {
+            return $this->regioes->all();
+        }
+
+        return $this->regioes->forRede((int) $this->contextRedeId());
+    }
+
+    private function regionError(int $redeId, mixed $value): ?array
+    {
+        $regiaoId = $this->regionId($value);
+
+        if ($regiaoId === null) {
+            return null;
+        }
+
+        $regiao = $this->regioes->findById($regiaoId);
+
+        if ($regiao === null || (int) $regiao['rede_id'] !== $redeId) {
+            return ['regiao_id' => ['Selecione uma região vinculada à rede.']];
+        }
+
+        return null;
+    }
+
+    private function regionId(mixed $value): ?int
+    {
+        $regiaoId = (int) $value;
+
+        return $regiaoId > 0 ? $regiaoId : null;
+    }
+
+    private function selectedRegion(int $unidadeId): ?int
+    {
+        $regioes = $this->regioes->forUnidade($unidadeId);
+
+        return $regioes === [] ? null : (int) $regioes[0]['id'];
     }
 
     private function findScoped(int $id): array

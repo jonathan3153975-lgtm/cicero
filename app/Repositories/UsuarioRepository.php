@@ -103,20 +103,32 @@ final class UsuarioRepository extends Repository
         $statement->execute(['momento' => $moment, 'id' => $id]);
     }
 
-    public function create(string $nome, string $email, string $passwordHash, string $status = 'ATIVO'): int
+    public function create(string $nome, string $email, string $passwordHash, string $status = 'ATIVO', ?int $pessoaId = null): int
     {
         $statement = $this->pdo()->prepare(
-            'INSERT INTO usuarios (nome, email, senha_hash, status)'
-            . ' VALUES (:nome, :email, :senha_hash, :status)'
+            'INSERT INTO usuarios (nome, email, senha_hash, status, pessoa_id)'
+            . ' VALUES (:nome, :email, :senha_hash, :status, :pessoa_id)'
         );
         $statement->execute([
             'nome' => $nome,
             'email' => mb_strtolower($email),
             'senha_hash' => $passwordHash,
             'status' => $status,
+            'pessoa_id' => $pessoaId,
         ]);
 
         return (int) $this->pdo()->lastInsertId();
+    }
+
+    public function findByPessoaId(int $pessoaId): ?array
+    {
+        $statement = $this->pdo()->prepare(
+            'SELECT id, nome, email, status, ultimo_login_em FROM usuarios WHERE pessoa_id = :pessoa_id LIMIT 1'
+        );
+        $statement->execute(['pessoa_id' => $pessoaId]);
+        $row = $statement->fetch();
+
+        return $row === false ? null : $row;
     }
 
     public function update(int $id, string $nome, string $email, string $status): void

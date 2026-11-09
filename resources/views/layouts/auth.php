@@ -55,6 +55,7 @@
         <?= $content ?>
     </main>
 </div>
+<?php require base_path('resources/views/layouts/partials/loading.php'); ?>
 <script type="module" src="/assets/js/app.js"></script>
 </body>
 </html>

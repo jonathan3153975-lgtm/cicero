@@ -71,6 +71,8 @@ final class ContaBancariaController extends AdminController
             return $this->backWithErrors('/admin/contas-bancarias', $errors, $data);
         }
 
+        $saldoInicial = $this->parseCurrency((string) ($data['saldo_inicial'] ?? '0'));
+
         $id = $this->contas->create([
             'rede_id' => (int) $unidade['rede_id'],
             'unidade_id' => (int) $unidade['id'],
@@ -78,7 +80,7 @@ final class ContaBancariaController extends AdminController
             'agencia' => trim((string) ($data['agencia'] ?? '')),
             'conta' => trim((string) ($data['conta'] ?? '')),
             'tipo' => strtoupper(trim((string) ($data['tipo'] ?? 'CORRENTE'))),
-            'saldo_inicial' => round((float) ($data['saldo_inicial'] ?? 0), 2),
+            'saldo_inicial' => round($saldoInicial, 2),
             'status' => 'ATIVO',
         ]);
 
@@ -86,5 +88,22 @@ final class ContaBancariaController extends AdminController
         $this->flashSuccess('Conta bancária criada com sucesso.');
 
         return $this->redirect('/admin/contas-bancarias');
+    }
+
+    private function parseCurrency(string $value): float
+    {
+        // Remove espaços
+        $value = trim($value);
+        
+        // Se já é um número válido (formato US), retorna direto
+        if ($value === '' || is_numeric($value)) {
+            return (float) $value;
+        }
+        
+        // Formato brasileiro: 1.234,56 -> remove pontos de milhar, troca vírgula por ponto
+        $value = str_replace('.', '', $value);
+        $value = str_replace(',', '.', $value);
+        
+        return (float) $value;
     }
 }
