@@ -63,7 +63,11 @@ Acesse `http://localhost:8000`.
 - Contexto: `/contexto`
 - Configurações: `/configuracoes`
 - Administração: `/admin`, `/admin/redes`, `/admin/regioes`,
-  `/admin/unidades`, `/admin/usuarios`, `/admin/perfis`,
+  `/admin/unidades`, `/admin/pessoas`, `/admin/alunos`, `/admin/planos`,
+  `/admin/matriculas`, `/admin/contratos`, `/admin/turmas`, `/admin/frequencias`,
+  `/admin/reservas`, `/admin/dispositivos`, `/admin/acessos`, `/admin/cobrancas`,
+  `/admin/pagamentos`, `/admin/contas-pagar`, `/admin/contas-bancarias`,
+  `/admin/conciliacoes`, `/admin/usuarios`, `/admin/perfis`,
   `/admin/permissoes`, `/admin/vinculos` e `/admin/auditoria`
 - API: `GET /api/v1/health`
 
@@ -87,6 +91,11 @@ essas credenciais em produção.
 - Matriz de concessão estrita: nível inferior ao ator, exceto Superadmin.
 - Contexto de rede/unidade/região validado no backend.
 - Vínculos e opções de formulário filtrados pelo escopo.
+- Cadastro unificado de pessoas, alunos e responsáveis (Onda 1).
+- Catálogo, planos, preços por unidade, contratos e matrículas (Onda 2).
+- Turmas, horários, reservas, frequência e eventos de acesso (Onda 3).
+- Cobranças, pagamentos, contas a pagar, movimentos de caixa e conciliação
+  bancária (Onda 4).
 - Deny by default, bloqueio de escalada e auditoria de ações administrativas.
 - CRUD administrativo de redes, regiões, unidades, usuários, perfis e vínculos.
 
@@ -98,7 +107,7 @@ composer format
 ```
 
 Os testes de integração usam o banco configurado no `.env`.
-Situação atual: 49 testes e 318 asserções aprovados.
+Situação atual: 69 testes e 536 asserções aprovados.
 
 ## Estrutura
 

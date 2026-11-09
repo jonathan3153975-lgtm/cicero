@@ -35,4 +35,4 @@ Também foi confirmado que o login com as credenciais corretas funciona em
 - Sessão expirada no login permite nova tentativa imediata.
 - Logs permitem diagnosticar tentativas inválidas.
 - Credenciais de demonstração: `admin@local.test` / `Admin@123`.
-- Suíte atual: 49 testes e 318 asserções aprovados.
+- Suíte atual: 65 testes e 493 asserções aprovados.

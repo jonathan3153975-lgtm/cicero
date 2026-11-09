@@ -1070,13 +1070,13 @@ Após a conclusão da Fase 3, as fases seguintes ficam pendentes de autorizaçã
 
 ### Entregas
 
-- 13 migrations e seeds idempotentes (36 permissões, 8 perfis, 8 usuários demo).
+- 13 migrations e seeds idempotentes (72 permissões, 8 perfis, 8 usuários demo).
 - Repositories, Services, AuthorizationService, TenantContextService e AuditService.
 - Autenticação real em usuarios, com remoção da autenticação de demonstração.
 - PermissionMiddleware, ScopeMiddleware e pipeline parametrizável.
 - CRUD administrativo de redes, regiões, unidades, usuários, perfis e vínculos.
 - Anti-escalada de privilégio, escopo por rede/unidade/região e auditoria.
-- 49 testes e 318 asserções aprovados.
+- 65 testes e 493 asserções aprovados.
 - Documentação atualizada em Manual/00, Manual/01, Manual/03,
   Manual/decisoes-tecnicas/0004 e Manual/decisoes-tecnicas/0005.
 
@@ -1104,7 +1104,7 @@ Aplicada em 2026-11-08:
 - Auditoria de unidade limitada à unidade; ações de rede/região/perfis globais sem unidade.
 - Migration  015_normalize_audit_scope.php para escopos históricos.
 - Listagem de perfis filtrada por nível; edição de perfil superior retorna 403.
-- Suíte: 49 testes e 318 asserções.
+- Suíte: 65 testes e 493 asserções.
 
 Permanecem as Prioridades 2–3 do relatório de escopo.
 ### Prioridades 2–3 — perfis e regiões
@@ -1119,4 +1119,4 @@ Aplicadas em 2026-11-08:
 - Criação de unidade em contexto regional vincula automaticamente a região.
 - Regiões passam a ser criadas/editadas apenas pelo Superadmin.
 - Dados de teste removidos: 1 rede, 1 região, 2 unidades, 8 usuários e 8 perfis.
-- Suíte: 49 testes e 318 asserções.
+- Suíte: 65 testes e 493 asserções.

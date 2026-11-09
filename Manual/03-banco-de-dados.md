@@ -1,8 +1,8 @@
 # Banco de dados — perfis, níveis, unidades e permissões
 **Documento de referência:** `projeto/2 - Criação de niveis de acesso e ambiente.md`
-**Versão:** 1.1
-**Status:** Fases 0–6 implementadas
-**Data:** 2026-11-08
+**Versão:** 1.2
+**Status:** Fases 0–6 e Ondas 1–4 implementadas
+**Data:** 2026-11-09
 
 ## 1. Objetivo
 
@@ -27,6 +27,9 @@ administração.
 | `0012_create_usuario_perfil_table.php` | `usuario_perfil` |
 | `0013_create_usuario_permissao_table.php` | `usuario_permissao` |
 | `0014_create_auditoria_table.php` | `auditoria` |
+| `0029_create_financeiro_base_tables.php` | `contas_bancarias`, `formas_pagamento`, `centros_custo`, `fornecedores` |
+| `0030_create_cobrancas_pagamentos_tables.php` | `cobrancas`, `cobranca_itens`, `pagamentos`, `pagamento_alocacoes`, `estornos` |
+| `0031_create_contas_pagar_conciliacao_tables.php` | `renegociacoes`, `renegociacao_itens`, `contas_pagar`, `movimentos_caixa`, `conciliacoes_bancarias`, `conciliacao_itens` |
 
 A migration `0001_create_health_checks_table.php` pertence à fundação.
 
@@ -79,7 +82,7 @@ O catálogo é carregado por seed a partir de
 - `cliente`, `plano`, `financeiro`, `relatorio`, `auditoria`.
 - `contexto`, `dashboard`, `configuracao`.
 
-Total atual: 36 permissões.
+Total atual: 72 permissões.
 
 ## 6. Resolução de permissões
 
@@ -125,7 +128,7 @@ composer seed
 
 O seed é idempotente. Ele cria/atualiza:
 
-- 36 permissões.
+- 72 permissões.
 - 8 perfis de sistema.
 - Rede demonstração, região Metropolitana e unidades Centro e Shopping.
 - Usuários de demonstração com senha `Admin@123`.
@@ -173,7 +176,7 @@ A suíte cobre:
 - isolamento entre unidades e recálculo imediato de permissões;
 - registro e consulta de auditoria.
 
-Situação atual: 49 testes e 318 asserções aprovados.
+Situação atual: 69 testes e 536 asserções aprovados.
 
 ## 12. Administração
 
@@ -221,7 +224,7 @@ Aplicadas em 2026-11-08:
 - Migration  015_normalize_audit_scope.php para corrigir escopos históricos.
 - Listagem de perfis filtrada pelo nível do ator.
 - Edição de perfil de nível superior retorna 403.
-- Suíte atual: 49 testes e 318 asserções.
+- Suíte atual: 69 testes e 536 asserções.
 ## 16. Prioridades 2–3 — escopo de perfis e regiões
 
 Aplicadas em 2026-11-08:
@@ -238,4 +241,85 @@ Aplicadas em 2026-11-08:
 - Criação de unidade em contexto regional vincula a unidade à região.
 - egiao.criar/egiao.editar removidas do Admin Regional.
 - Dados de teste removidos; ambiente com 1 rede, 1 região, 2 unidades, 8 usuários e 8 perfis.
-- Suíte atual: 49 testes e 318 asserções.
+- Suíte atual: 69 testes e 536 asserções.
+## 18. Onda 1 — Pessoas e alunos
+
+Implementada em 2026-11-09:
+
+- Novas tabelas: rquivos, pessoas, pessoa_enderecos, pessoa_contatos,
+  pessoa_documentos, consentimentos, lunos, luno_responsaveis e
+  luno_restricoes_saude.
+- usuarios.pessoa_id adicionado com backfill dos usuários existentes.
+- Catálogo ampliado para 72 permissões: pessoa.*, luno.*, esponsavel.*,
+  lgpd.consentimento.* e saude.*.
+- Rotas administrativas de pessoas e alunos com escopo por rede/unidade/região.
+- Serviços PessoaService e AlunoService com validação de CPF/CNPJ,
+  responsáveis, contatos e endereços.
+- Telas de pessoas, alunos e responsáveis.
+- Suíte atual: 69 testes e 536 asserções.
+
+Pendências da onda: upload/tela de documentos, tela de consentimentos, tela de
+restrições de saúde e dados de demonstração de alunos.
+## 19. Onda 2 — Catálogo, planos, preços, contratos e matrículas
+
+Implementada em 2026-11-09:
+
+- Novas tabelas: modalidades, planos, plano_modalidades,
+  plano_unidade_precos, servicos_adicionais, promocoes, contratos,
+  matriculas, matricula_servicos, eajustes, descontos e 	ransferencias.
+- Serviços: PlanoService, PlanoPrecoService, MatriculaService e
+  ContratoService.
+- Telas: planos, preços por unidade, matrículas e contratos.
+- Regras: preço ativo da unidade do aluno, uma matrícula ativa por unidade,
+  contrato criado em transação, escopo por rede/unidade/região.
+- Catálogo ampliado para 72 permissões com matricula.* e contrato.*.
+- Modalidades padrão semeadas.
+- Suíte atual: 69 testes e 536 asserções.
+
+Pendências: telas de modalidades, serviços, promoções, reajustes, descontos e
+transferências; renovação automática e cobranças na Onda 4.
+## 20. Onda 3 — Operação e controle de acesso
+
+Implementada em 2026-11-09:
+
+- Novas tabelas: 	urmas, 	urma_horarios, 	urma_alunos, eservas,
+  requencias, dispositivos_acesso, eventos_acesso e ocorrencias.
+- Serviços: TurmaService, FrequenciaService, ReservaService e
+  AcessoService.
+- Telas: turmas, horários, frequência, reservas, dispositivos e eventos de
+  acesso.
+- Regras: sobreposição de horários, frequência única por aluno/turma/data,
+  reserva no dia do horário, capacidade e isolamento por unidade.
+- Catálogo ampliado para 72 permissões com 	urma.*, requencia.*,
+  reserva.*, dispositivo.*, evento_acesso.* e ocorrencia.*.
+- Suíte atual: 69 testes e 536 asserções.
+
+Pendências: tela de vínculo turma/aluno, professor no horário, tela de
+ocorrências, registro manual de eventos e integração real com catracas.
+
+## 21. Onda 4 — Financeiro
+
+Implementada em 2026-11-09:
+
+- Novas tabelas: contas_bancarias, formas_pagamento, centros_custo,
+  fornecedores, cobrancas, cobranca_itens, pagamentos, pagamento_alocacoes,
+  estornos, renegociacoes, renegociacao_itens, contas_pagar, movimentos_caixa,
+  conciliacoes_bancarias e conciliacao_itens.
+- Serviços: CobrancaService, PagamentoService, ContaPagarService e
+  ConciliacaoService.
+- Repositórios: CobrancaRepository, PagamentoRepository, ContaPagarRepository,
+  ContaBancariaRepository, FormaPagamentoRepository, CentroCustoRepository,
+  MovimentoCaixaRepository, ConciliacaoRepository e EstornoRepository.
+- Telas: cobranças, pagamentos, contas a pagar, contas bancárias e conciliação.
+- Regras: mensalidade única por matrícula/competência, pagamento limitado ao
+  saldo, estorno com recálculo, quitação de despesas com movimento de saída,
+  conciliação automática por data/tipo/valor e escopo por rede/unidade/região.
+- Seeds: formas de pagamento globais e conta "Caixa Interno" + centro "Geral"
+  por unidade.
+- Catálogo permanece com 72 permissões, reutilizando financeiro.visualizar e
+  financeiro.editar.
+- Suíte atual: 69 testes e 536 asserções.
+
+Pendências: geração recorrente em lote, integração real de PIX/boleto,
+tela de fornecedores, tela de renegociação, upload OFX/CSV e relatórios
+financeiros.

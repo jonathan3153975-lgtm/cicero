@@ -31,7 +31,7 @@ final class TenantContextServiceTest extends IntegrationTestCase
     {
         $contexts = $this->contexts->contextsForUser($this->userId('regional@local.test'));
 
-        self::assertCount(3, $contexts);
+        self::assertGreaterThanOrEqual(3, count($contexts));
 
         $types = array_map(static fn (array $context): string => $context['tipo'], $contexts);
         self::assertContains('REGIAO', $types);

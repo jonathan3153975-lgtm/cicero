@@ -1,8 +1,8 @@
 # Estrutura inicial — registro da implementação
 
 **Documento de referência:** `projeto/1 - Estrutura inicial.md`
-**Status:** fundação implementada; Fases 0–6 do documento 02 implementadas
-**Data:** 2026-11-08
+**Status:** fundação implementada; Fases 0–6 do documento 02 e Ondas 1–4 do documento 03 implementadas
+**Data:** 2026-11-09
 
 ## 1. Resumo
 
@@ -13,6 +13,18 @@ descritos na seção 3 da especificação.
 Sobre essa base foram implementadas as Fases 0–6 do documento 02: níveis,
 perfis, permissões, redes, unidades, regiões, vínculos, contexto, auditoria e
 administração.
+
+A Onda 1 do documento 03 adicionou pessoas, alunos, responsáveis, contatos,
+endereços, documentos, consentimentos e o vínculo dos usuários com pessoas.
+
+A Onda 2 adicionou catálogo comercial, modalidades, planos, preços por unidade,
+contratos e matrículas.
+
+A Onda 3 adicionou turmas, horários, reservas, frequência, dispositivos e
+eventos de acesso.
+
+A Onda 4 adicionou cobranças, pagamentos, estornos, contas a pagar, contas
+bancárias, movimentos de caixa e conciliação bancária.
 
 ## 2. Andamento por etapa da fundação
 
@@ -163,7 +175,7 @@ produção.
 
 - 13 novas tabelas: redes, regiões, unidades, usuários, perfis, permissões,
   vínculos, permissões explícitas e auditoria.
-- 36 permissões e 8 perfis de sistema.
+- 72 permissões e 8 perfis de sistema.
 - Seeds idempotentes em `database/seeds/data/`.
 
 ### Autorização
@@ -197,6 +209,42 @@ produção.
 - Auditoria de ações administrativas por contexto.
 - Permissões recalculadas a cada requisição.
 
+### Onda 1 — Pessoas e alunos
+
+- Cadastro unificado de pessoas PF/PJ.
+- Alunos, responsáveis, contatos, endereços, documentos e consentimentos.
+- Vínculo `usuarios.pessoa_id` com backfill dos usuários existentes.
+- Telas administrativas de pessoas, alunos e responsáveis.
+- Escopo de pessoas/alunos por rede, unidade e região.
+- Permissões `pessoa.*`, `aluno.*`, `responsavel.*`, `lgpd.consentimento.*` e
+  `saude.*`.
+
+### Onda 2 — Catálogo e matrículas
+
+- Modalidades, planos, modalidades por plano e preços por unidade.
+- Contratos, matrículas, serviços, reajustes, descontos e transferências.
+- Telas de planos, preços, matrículas e contratos.
+- Uma matrícula ativa por aluno/unidade.
+- Contrato criado em transação com a matrícula.
+- Permissões `matricula.*` e `contrato.*`; catálogo com 72 permissões.
+
+### Onda 3 — Operação e acesso
+
+- Turmas, horários, reservas e frequência.
+- Dispositivos e eventos de acesso.
+- Bloqueio de horários sobrepostos, frequência duplicada e reserva fora do dia.
+- Capacidade de turma e isolamento por unidade.
+- Permissões `turma.*`, `frequencia.*`, `reserva.*`, `dispositivo.*`,
+  `evento_acesso.*` e `ocorrencia.*`.
+
+### Onda 4 — Financeiro
+
+- Cobranças por matrícula e avulsas, com itens e saldo.
+- Pagamentos com alocação, movimento de caixa e estorno.
+- Contas a pagar, contas bancárias, centros de custo e formas de pagamento.
+- Conciliação bancária por importação de CSV.
+- Reaproveitamento das permissões `financeiro.visualizar` e `financeiro.editar`.
+
 ## 8. Critérios de aceite da fundação
 
 | # | Critério | Situação |
@@ -217,7 +265,7 @@ produção.
 
 ## 9. Testes
 
-Suíte atual: **49 testes, 318 asserções, todos aprovados**.
+Suíte atual: **69 testes, 536 asserções, todos aprovados**.
 
 Cobrem fundação, conexão, persistência, autenticação real, permissões por
 perfil, isolamento por unidade, permissões regionais, não escalada, contextos,
@@ -225,7 +273,15 @@ CRUD administrativo, recálculo de permissões e auditoria.
 
 ## 10. Pendências
 
-1. Política formal de retenção/mascaramento da auditoria (LGPD).
-2. Interface para permissões explícitas em `usuario_permissao`.
-3. Módulos funcionais (alunos, financeiro, treinos e comunidade).
-4. Testes externos de carga, segurança e acessibilidade.
+1. Onda 1: upload/tela de documentos, tela de consentimentos, tela de
+   restrições de saúde e dados de demonstração de alunos.
+2. Onda 2: telas de modalidades, serviços, promoções, reajustes, descontos e
+   transferências.
+3. Onda 3: tela de vínculo turma/aluno, professor no horário, tela de
+   ocorrências, registro manual de eventos e integração real com catracas.
+4. Onda 4: geração recorrente em lote, PIX/boleto reais, tela de fornecedores,
+   renegociação e relatórios financeiros.
+5. Aplicar a política de retenção LGPD de 2 anos.
+6. Interface para permissões explícitas em `usuario_permissao`.
+7. Ondas 5–8: contabilidade, RH, treinos, comunicação e relatórios.
+7. Testes externos de carga, segurança e acessibilidade.

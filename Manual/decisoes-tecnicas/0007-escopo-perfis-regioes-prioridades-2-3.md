@@ -72,6 +72,6 @@ As Prioridades 2 e 3 do plano de correção exigiram:
   ou perfis globais.
 - Admin Regional opera na própria região, com contexto regional explícito.
 - Superadmin mantém administração global.
-- Suíte atual: 49 testes e 318 asserções aprovados.
+- Suíte atual: 65 testes e 493 asserções aprovados.
 - Pendências: política de retenção/mascaramento da auditoria (LGPD), interface de
   permissões explícitas e módulos funcionais.

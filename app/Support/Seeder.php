@@ -25,6 +25,8 @@ final class Seeder
         $this->seedPermissions($permissions);
         $this->seedProfiles($profiles);
         $this->seedDemo($demo);
+        $this->seedModalities();
+        $this->seedFinanceiro();
 
         return [
             'permissoes' => count($permissions),
@@ -107,6 +109,75 @@ final class Seeder
                     'permissao_id' => $permissionId,
                 ]);
             }
+        }
+    }
+
+    private function seedModalities(): void
+    {
+        $find = $this->pdo->prepare(
+            'SELECT id FROM modalidades WHERE rede_id IS NULL AND nome = :nome LIMIT 1'
+        );
+        $insert = $this->pdo->prepare(
+            'INSERT INTO modalidades (rede_id, nome, status) VALUES (NULL, :nome, \'ATIVO\')'
+        );
+
+        foreach (['Musculação', 'Funcional', 'Pilates', 'Cross Training', 'Hidroginástica'] as $nome) {
+            $find->execute(['nome' => $nome]);
+
+            if ($find->fetchColumn() === false) {
+                $insert->execute(['nome' => $nome]);
+            }
+        }
+    }
+
+
+    private function seedFinanceiro(): void
+    {
+        $formas = [
+            ['Dinheiro', 'DINHEIRO'],
+            ['PIX', 'PIX'],
+            ['Cartão de Crédito', 'CARTAO_CREDITO'],
+            ['Cartão de Débito', 'CARTAO_DEBITO'],
+            ['Boleto', 'BOLETO'],
+            ['Transferência', 'TRANSFERENCIA'],
+        ];
+
+        $findForma = $this->pdo->prepare(
+            'SELECT id FROM formas_pagamento WHERE rede_id IS NULL AND nome = :nome LIMIT 1'
+        );
+        $insertForma = $this->pdo->prepare(
+            'INSERT INTO formas_pagamento (rede_id, nome, tipo, status) VALUES (NULL, :nome, :tipo, \'ATIVO\')'
+        );
+
+        foreach ($formas as [$nome, $tipo]) {
+            $findForma->execute(['nome' => $nome]);
+
+            if ($findForma->fetchColumn() === false) {
+                $insertForma->execute(['nome' => $nome, 'tipo' => $tipo]);
+            }
+        }
+
+        $unidades = $this->pdo->query('SELECT id, rede_id FROM unidades ORDER BY id ASC')->fetchAll(PDO::FETCH_ASSOC);
+        $insertConta = $this->pdo->prepare(
+            'INSERT INTO contas_bancarias (rede_id, unidade_id, banco, agencia, conta, tipo, saldo_inicial, status)'
+            . ' VALUES (:rede_id, :unidade_id, \'Caixa Interno\', \'0001\', \'0001\', \'CAIXA\', 0, \'ATIVO\')'
+            . ' ON DUPLICATE KEY UPDATE status = \'ATIVO\''
+        );
+        $insertCentro = $this->pdo->prepare(
+            'INSERT INTO centros_custo (rede_id, unidade_id, codigo, nome, status)'
+            . ' VALUES (:rede_id, :unidade_id, \'GERAL\', \'Geral\', \'ATIVO\')'
+            . ' ON DUPLICATE KEY UPDATE status = \'ATIVO\''
+        );
+
+        foreach ($unidades as $unidade) {
+            $insertConta->execute([
+                'rede_id' => (int) $unidade['rede_id'],
+                'unidade_id' => (int) $unidade['id'],
+            ]);
+            $insertCentro->execute([
+                'rede_id' => (int) $unidade['rede_id'],
+                'unidade_id' => (int) $unidade['id'],
+            ]);
         }
     }
 

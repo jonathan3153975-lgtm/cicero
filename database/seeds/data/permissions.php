@@ -21,6 +21,54 @@ return [
     ['slug' => 'usuario.excluir', 'modulo' => 'usuario', 'acao' => 'excluir', 'descricao' => 'Desativar usuários'],
     ['slug' => 'usuario.visualizar', 'modulo' => 'usuario', 'acao' => 'visualizar', 'descricao' => 'Visualizar usuários'],
 
+    ['slug' => 'pessoa.visualizar', 'modulo' => 'pessoa', 'acao' => 'visualizar', 'descricao' => 'Visualizar pessoas'],
+    ['slug' => 'pessoa.criar', 'modulo' => 'pessoa', 'acao' => 'criar', 'descricao' => 'Criar pessoas'],
+    ['slug' => 'pessoa.editar', 'modulo' => 'pessoa', 'acao' => 'editar', 'descricao' => 'Editar pessoas'],
+    ['slug' => 'pessoa.inativar', 'modulo' => 'pessoa', 'acao' => 'inativar', 'descricao' => 'Inativar pessoas'],
+
+    ['slug' => 'aluno.visualizar', 'modulo' => 'aluno', 'acao' => 'visualizar', 'descricao' => 'Visualizar alunos'],
+    ['slug' => 'aluno.criar', 'modulo' => 'aluno', 'acao' => 'criar', 'descricao' => 'Criar alunos'],
+    ['slug' => 'aluno.editar', 'modulo' => 'aluno', 'acao' => 'editar', 'descricao' => 'Editar alunos'],
+    ['slug' => 'aluno.inativar', 'modulo' => 'aluno', 'acao' => 'inativar', 'descricao' => 'Inativar alunos'],
+
+    ['slug' => 'matricula.visualizar', 'modulo' => 'matricula', 'acao' => 'visualizar', 'descricao' => 'Visualizar matrículas'],
+    ['slug' => 'matricula.criar', 'modulo' => 'matricula', 'acao' => 'criar', 'descricao' => 'Criar matrículas'],
+    ['slug' => 'matricula.editar', 'modulo' => 'matricula', 'acao' => 'editar', 'descricao' => 'Editar matrículas'],
+    ['slug' => 'matricula.cancelar', 'modulo' => 'matricula', 'acao' => 'cancelar', 'descricao' => 'Cancelar matrículas'],
+
+    ['slug' => 'contrato.visualizar', 'modulo' => 'contrato', 'acao' => 'visualizar', 'descricao' => 'Visualizar contratos'],
+    ['slug' => 'contrato.editar', 'modulo' => 'contrato', 'acao' => 'editar', 'descricao' => 'Editar contratos'],
+
+    ['slug' => 'turma.visualizar', 'modulo' => 'turma', 'acao' => 'visualizar', 'descricao' => 'Visualizar turmas'],
+    ['slug' => 'turma.criar', 'modulo' => 'turma', 'acao' => 'criar', 'descricao' => 'Criar turmas'],
+    ['slug' => 'turma.editar', 'modulo' => 'turma', 'acao' => 'editar', 'descricao' => 'Editar turmas e horários'],
+
+    ['slug' => 'frequencia.visualizar', 'modulo' => 'frequencia', 'acao' => 'visualizar', 'descricao' => 'Visualizar frequência'],
+    ['slug' => 'frequencia.registrar', 'modulo' => 'frequencia', 'acao' => 'registrar', 'descricao' => 'Registrar frequência'],
+
+    ['slug' => 'reserva.visualizar', 'modulo' => 'reserva', 'acao' => 'visualizar', 'descricao' => 'Visualizar reservas'],
+    ['slug' => 'reserva.criar', 'modulo' => 'reserva', 'acao' => 'criar', 'descricao' => 'Criar reservas'],
+    ['slug' => 'reserva.cancelar', 'modulo' => 'reserva', 'acao' => 'cancelar', 'descricao' => 'Cancelar reservas'],
+
+    ['slug' => 'dispositivo.visualizar', 'modulo' => 'dispositivo', 'acao' => 'visualizar', 'descricao' => 'Visualizar dispositivos de acesso'],
+    ['slug' => 'dispositivo.gerenciar', 'modulo' => 'dispositivo', 'acao' => 'gerenciar', 'descricao' => 'Gerenciar dispositivos de acesso'],
+    ['slug' => 'evento_acesso.visualizar', 'modulo' => 'evento_acesso', 'acao' => 'visualizar', 'descricao' => 'Visualizar eventos de acesso'],
+
+    ['slug' => 'ocorrencia.visualizar', 'modulo' => 'ocorrencia', 'acao' => 'visualizar', 'descricao' => 'Visualizar ocorrências'],
+    ['slug' => 'ocorrencia.criar', 'modulo' => 'ocorrencia', 'acao' => 'criar', 'descricao' => 'Criar ocorrências'],
+    ['slug' => 'ocorrencia.editar', 'modulo' => 'ocorrencia', 'acao' => 'editar', 'descricao' => 'Editar ocorrências'],
+
+    ['slug' => 'responsavel.visualizar', 'modulo' => 'responsavel', 'acao' => 'visualizar', 'descricao' => 'Visualizar responsáveis'],
+    ['slug' => 'responsavel.criar', 'modulo' => 'responsavel', 'acao' => 'criar', 'descricao' => 'Adicionar responsáveis'],
+    ['slug' => 'responsavel.editar', 'modulo' => 'responsavel', 'acao' => 'editar', 'descricao' => 'Editar/remover responsáveis'],
+
+    ['slug' => 'lgpd.consentimento.visualizar', 'modulo' => 'lgpd', 'acao' => 'consentimento.visualizar', 'descricao' => 'Visualizar consentimentos LGPD'],
+    ['slug' => 'lgpd.consentimento.gerenciar', 'modulo' => 'lgpd', 'acao' => 'consentimento.gerenciar', 'descricao' => 'Gerenciar consentimentos LGPD'],
+
+    ['slug' => 'saude.visualizar', 'modulo' => 'saude', 'acao' => 'visualizar', 'descricao' => 'Visualizar dados de saúde autorizados'],
+    ['slug' => 'saude.autorizar', 'modulo' => 'saude', 'acao' => 'autorizar', 'descricao' => 'Autorizar acesso a dados de saúde'],
+    ['slug' => 'saude.auditar', 'modulo' => 'saude', 'acao' => 'auditar', 'descricao' => 'Auditar acesso a dados de saúde'],
+
     ['slug' => 'perfil.criar', 'modulo' => 'perfil', 'acao' => 'criar', 'descricao' => 'Criar perfis'],
     ['slug' => 'perfil.editar', 'modulo' => 'perfil', 'acao' => 'editar', 'descricao' => 'Editar perfis'],
     ['slug' => 'perfil.visualizar', 'modulo' => 'perfil', 'acao' => 'visualizar', 'descricao' => 'Visualizar perfis'],

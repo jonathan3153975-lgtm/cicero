@@ -65,6 +65,42 @@ final class Validator
         return $this;
     }
 
+    public function cpf(string $field, ?string $message = null): self
+    {
+        $value = preg_replace('/\D/', '', $this->value($field)) ?? '';
+
+        if ($value !== '' && !self::isValidCpf($value)) {
+            $this->addError($field, $message ?? 'Informe um CPF válido.');
+        }
+
+        return $this;
+    }
+
+    public static function isValidCpf(string $cpf): bool
+    {
+        $cpf = preg_replace('/\D/', '', $cpf) ?? '';
+
+        if (mb_strlen($cpf) !== 11 || preg_match('/^(\d)\1{10}$/', $cpf) === 1) {
+            return false;
+        }
+
+        for ($digitIndex = 9; $digitIndex < 11; $digitIndex++) {
+            $sum = 0;
+
+            for ($index = 0; $index < $digitIndex; $index++) {
+                $sum += (int) $cpf[$index] * (($digitIndex + 1) - $index);
+            }
+
+            $digit = (($sum * 10) % 11) % 10;
+
+            if ((int) $cpf[$digitIndex] !== $digit) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function cnpj(string $field, ?string $message = null): self
     {
         $value = preg_replace('/\D/', '', $this->value($field)) ?? '';

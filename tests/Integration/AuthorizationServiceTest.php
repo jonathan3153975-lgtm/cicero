@@ -120,6 +120,30 @@ final class AuthorizationServiceTest extends IntegrationTestCase
         ));
     }
 
+    public function testPeoplePermissionsAreAssignedToOperationalProfiles(): void
+    {
+        $localPermissions = $this->authorization->permissionsForContext(
+            $this->userId('local@local.test'),
+            $this->redeId(),
+            $this->unidadeId('CENTRO')
+        );
+        $receptionPermissions = $this->authorization->permissionsForContext(
+            $this->userId('recepcao@local.test'),
+            $this->redeId(),
+            $this->unidadeId('CENTRO')
+        );
+        $employeePermissions = $this->authorization->permissionsForContext(
+            $this->userId('funcionario@local.test'),
+            $this->redeId(),
+            $this->unidadeId('CENTRO')
+        );
+
+        self::assertContains('pessoa.criar', $localPermissions);
+        self::assertContains('aluno.criar', $localPermissions);
+        self::assertContains('aluno.criar', $receptionPermissions);
+        self::assertNotContains('aluno.criar', $employeePermissions);
+    }
+
     public function testItBlocksEqualLevelGrantsForNonSuperadmin(): void
     {
         $adminLocalId = (int) $this->perfis->findBySlug('ADMIN_LOCAL')['id'];

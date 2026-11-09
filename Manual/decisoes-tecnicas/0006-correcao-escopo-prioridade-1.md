@@ -42,4 +42,4 @@ consistente em edição de usuários, auditoria e gestão de perfis.
 - A listagem de perfis oculta `SUPERADMIN` e `ADMIN_REGIONAL` para o Admin Local.
 - Permanecem para as próximas prioridades: escopo global de perfis, concessão de
   mesmo nível, escopo regional e filtragem de vínculos/opções de formulário.
-- Suíte atual: 47 testes e 315 asserções aprovados.
+- Suíte atual: 65 testes e 493 asserções aprovados.
