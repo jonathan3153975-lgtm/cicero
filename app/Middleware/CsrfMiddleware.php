@@ -9,6 +9,8 @@ use App\Support\Config;
 use App\Support\Csrf;
 use App\Support\Request;
 use App\Support\Response;
+use App\Support\Session;
+use Psr\Log\LoggerInterface;
 
 final class CsrfMiddleware implements MiddlewareInterface
 {
@@ -16,7 +18,9 @@ final class CsrfMiddleware implements MiddlewareInterface
 
     public function __construct(
         private readonly Csrf $csrf,
-        private readonly Config $config
+        private readonly Config $config,
+        private readonly Session $session,
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -27,6 +31,21 @@ final class CsrfMiddleware implements MiddlewareInterface
             $token = $request->input($name) ?? $request->header('X-CSRF-Token');
 
             if (!is_string($token) || !$this->csrf->validate($token)) {
+                $this->logger->warning('Falha de validação CSRF.', [
+                    'path' => $request->path,
+                    'method' => $request->method,
+                    'ip' => $request->ip(),
+                ]);
+
+                if ($request->path === '/login' && !$request->wantsJson()) {
+                    $this->session->flash(
+                        'error',
+                        'Sua sessão expirou. Recarregue a página e tente novamente.'
+                    );
+
+                    return Response::redirect('/login');
+                }
+
                 throw new HttpException(
                     'Sessão expirada. Recarregue a página e tente novamente.',
                     403

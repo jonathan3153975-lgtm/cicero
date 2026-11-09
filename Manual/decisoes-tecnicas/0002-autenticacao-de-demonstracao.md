@@ -1,7 +1,7 @@
 # 0002 — Autenticação de demonstração na fundação
 
 **Data:** 2026-11-08
-**Status:** provisória
+**Status:** substituída pela autenticação real (ver `0004-rbac-perfis-niveis-escopo.md`)
 
 ## Contexto
 
@@ -26,3 +26,8 @@ modelagem de usuários, vínculos e permissões pertence ao documento seguinte
 - O módulo real deve substituir `AuthController`, remover as variáveis `DEMO_*`
   e buscar usuários/vínculos no banco.
 - A interface de login e os middlewares podem ser reaproveitados.
+
+> **Nota (2026-11-08):** a autenticação de demonstração foi substituída na
+> Fase 3 pela autenticação real em `usuarios`, com `AuthService`,
+> `PermissionMiddleware`, `ScopeMiddleware` e `TenantContextService`.
+> As variáveis `DEMO_*` foram removidas do `.env` e do `.env.example`.

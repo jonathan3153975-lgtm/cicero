@@ -31,6 +31,7 @@
     "format": "php-cs-fixer fix",
     "migrate": "php bin/migrate.php migrate",
     "migrate:rollback": "php bin/migrate.php rollback",
+    "seed": "php bin/seed.php",
     "serve": "php -S localhost:8000 -t public"
   },
   "config": {

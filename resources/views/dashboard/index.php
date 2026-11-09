@@ -1,97 +1,81 @@
+<?php
+$contextLabel = is_array($context ?? null) ? ($context['label'] ?? '—') : '—';
+$permissionCount = count($permissions ?? []);
+$canViewSettings = isset($can) && $can('configuracao.visualizar');
+?>
 <section class="page-heading">
     <div>
-        <h2>Olá, <?= e($user['name'] ?? 'Administrador') ?></h2>
-        <p class="text-muted">Área protegida por autenticação e autorização por papel.</p>
+        <h2>Olá, <?= e($user['name'] ?? 'Usuário') ?></h2>
+        <p class="text-muted">Área protegida por autenticação e autorização por permissão.</p>
     </div>
-    <span class="badge badge--accent">Papel: <?= e($user['role'] ?? '—') ?></span>
+    <span class="badge badge--accent">Contexto: <?= e($contextLabel) ?></span>
 </section>
 
-<section class="stats-grid" aria-label="Resumo">
+<section class="stats-grid" aria-label="Resumo do contexto">
     <article class="stat-card">
-        <span class="stat-card__label">Redes</span>
-        <strong class="stat-card__value">—</strong>
-        <span class="stat-card__hint">Modelagem na próxima etapa</span>
+        <span class="stat-card__label">Contexto</span>
+        <strong class="stat-card__value stat-card__value--text"><?= e($contextLabel) ?></strong>
+        <span class="stat-card__hint">Rede/unidade ativa na sessão</span>
     </article>
     <article class="stat-card">
-        <span class="stat-card__label">Unidades</span>
-        <strong class="stat-card__value">—</strong>
-        <span class="stat-card__hint">Isolamento multiempresa</span>
-    </article>
-    <article class="stat-card">
-        <span class="stat-card__label">Usuários</span>
-        <strong class="stat-card__value">1</strong>
-        <span class="stat-card__hint">Usuário de demonstração</span>
+        <span class="stat-card__label">Permissões efetivas</span>
+        <strong class="stat-card__value"><?= e((string) $permissionCount) ?></strong>
+        <span class="stat-card__hint">Calculadas para o contexto atual</span>
     </article>
     <article class="stat-card">
         <span class="stat-card__label">Sessão</span>
         <strong class="stat-card__value">Ativa</strong>
         <span class="stat-card__hint">Regenerada após autenticação</span>
     </article>
+    <article class="stat-card">
+        <span class="stat-card__label">Usuário</span>
+        <strong class="stat-card__value stat-card__value--text"><?= e($user['email'] ?? '—') ?></strong>
+        <span class="stat-card__hint">Cadastro real em <code>usuarios</code></span>
+    </article>
 </section>
 
 <section class="card">
     <header class="card__header">
         <div>
-            <h3>Atalhos da fundação</h3>
-            <p class="text-muted">Pontos implementados nesta etapa.</p>
+            <h3>Permissões efetivas</h3>
+            <p class="text-muted">União dos perfis e permissões explícitas no contexto atual.</p>
+        </div>
+        <span class="badge"><?= e((string) $permissionCount) ?> permissões</span>
+    </header>
+
+    <?php if (($permissions ?? []) === []): ?>
+        <p class="text-muted">Nenhuma permissão efetiva neste contexto.</p>
+    <?php else: ?>
+        <div class="badge-list">
+            <?php foreach ($permissions as $permission): ?>
+                <span class="badge badge--success"><?= e($permission) ?></span>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+</section>
+
+<section class="card">
+    <header class="card__header">
+        <div>
+            <h3>Atalhos</h3>
+            <p class="text-muted">Ações disponíveis para o seu contexto.</p>
         </div>
     </header>
 
     <div class="quick-actions">
-        <a class="quick-action" href="/configuracoes">
-            <strong>Configurações</strong>
-            <span class="text-muted">Tokens de tema e identidade</span>
+        <a class="quick-action" href="/contexto">
+            <strong>Trocar contexto</strong>
+            <span class="text-muted">Redes e unidades vinculadas</span>
         </a>
+        <?php if ($canViewSettings): ?>
+            <a class="quick-action" href="/configuracoes">
+                <strong>Configurações</strong>
+                <span class="text-muted">Tokens de tema e identidade</span>
+            </a>
+        <?php endif; ?>
         <a class="quick-action" href="/api/v1/health" target="_blank" rel="noopener">
             <strong>Health check</strong>
             <span class="text-muted">JSON padronizado da API</span>
         </a>
-        <a class="quick-action" href="/" target="_self">
-            <strong>Página inicial</strong>
-            <span class="text-muted">Demonstração do Design System</span>
-        </a>
-    </div>
-</section>
-
-<section class="card" aria-label="Registros recentes">
-    <header class="card__header">
-        <div>
-            <h3>Registros recentes</h3>
-            <p class="text-muted">Tabela de exemplo do Design System.</p>
-        </div>
-        <span class="badge">Demonstração</span>
-    </header>
-
-    <div class="table-wrapper">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Evento</th>
-                    <th scope="col">Origem</th>
-                    <th scope="col">Data</th>
-                    <th scope="col">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Fundação criada</td>
-                    <td>Sistema</td>
-                    <td><?= e(date('d/m/Y H:i')) ?></td>
-                    <td><span class="badge badge--success">Concluído</span></td>
-                </tr>
-                <tr>
-                    <td>Migrations aplicadas</td>
-                    <td>Banco de dados</td>
-                    <td><?= e(date('d/m/Y')) ?></td>
-                    <td><span class="badge badge--success">Concluído</span></td>
-                </tr>
-                <tr>
-                    <td>Temas validados</td>
-                    <td>Design System</td>
-                    <td><?= e(date('d/m/Y')) ?></td>
-                    <td><span class="badge badge--success">Concluído</span></td>
-                </tr>
-            </tbody>
-        </table>
     </div>
 </section>

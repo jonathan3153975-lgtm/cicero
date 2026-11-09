@@ -167,6 +167,29 @@ body.sidebar-open {
     gap: var(--spacing-3);
 }
 
+.context-chip {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 5px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-elevated);
+    font-size: 0.78rem;
+    line-height: 1.2;
+}
+
+.context-chip:hover {
+    border-color: var(--brand-primary);
+}
+
+.context-chip__label {
+    color: var(--color-text-muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
 .user-chip {
     display: flex;
     align-items: center;
@@ -309,7 +332,8 @@ body.sidebar-open {
         display: none;
     }
 
-    .user-chip__name {
+    .user-chip__name,
+    .context-chip {
         display: none;
     }
 
@@ -325,4 +349,13 @@ body.sidebar-open {
     .error-card {
         padding: var(--spacing-5);
     }
+}
+
+.sidebar__section {
+    display: block;
+    margin: var(--spacing-4) var(--spacing-3) var(--spacing-1);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
 }

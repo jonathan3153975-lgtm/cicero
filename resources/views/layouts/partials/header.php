@@ -15,6 +15,12 @@
         </button>
 
         <?php if (!empty($isAuthenticated)): ?>
+            <?php if (is_array($context ?? null)): ?>
+                <a class="context-chip" href="/contexto" title="Trocar contexto">
+                    <span class="context-chip__label">Contexto</span>
+                    <strong><?= e($context['label'] ?? '—') ?></strong>
+                </a>
+            <?php endif; ?>
             <div class="user-chip">
                 <span class="user-chip__avatar" aria-hidden="true">
                     <?= e(mb_substr((string) (($user['name'] ?? 'U')), 0, 1)) ?>

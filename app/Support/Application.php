@@ -6,8 +6,10 @@ namespace App\Support;
 
 use App\Exceptions\HttpException;
 use App\Exceptions\NotFoundException;
+use App\Middleware\ConfigurableMiddlewareInterface;
 use App\Middleware\CsrfMiddleware;
 use App\Middleware\MiddlewareInterface;
+use App\Services\AuthorizationService;
 use RuntimeException;
 use Throwable;
 
@@ -20,7 +22,8 @@ final class Application
         private readonly Session $session,
         private readonly View $view,
         private readonly Csrf $csrf,
-        private readonly ExceptionHandler $exceptions
+        private readonly ExceptionHandler $exceptions,
+        private readonly AuthorizationService $authorization
     ) {
     }
 
@@ -64,9 +67,9 @@ final class Application
 
             $next = fn (Request $req): Response => $this->invoke($result->handler, $req);
 
-            foreach (array_reverse($middleware) as $id) {
-                $next = function (Request $req) use ($id, $next): Response {
-                    return $this->resolveMiddleware($id)->process($req, $next);
+            foreach (array_reverse($middleware) as $definition) {
+                $next = function (Request $req) use ($definition, $next): Response {
+                    return $this->resolveMiddleware($definition)->process($req, $next);
                 };
             }
 
@@ -100,12 +103,27 @@ final class Application
         return $response;
     }
 
-    private function resolveMiddleware(string $id): MiddlewareInterface
+    private function resolveMiddleware(string|array $definition): MiddlewareInterface
     {
-        $middleware = $this->container->get($id);
+        if (is_array($definition)) {
+            $class = $definition[0] ?? null;
+            $parameters = (array) ($definition[1] ?? []);
+
+            if (!is_string($class)) {
+                throw new RuntimeException('Definição de middleware inválida.');
+            }
+
+            $middleware = $this->container->get($class);
+
+            if ($middleware instanceof ConfigurableMiddlewareInterface) {
+                $middleware->configure($parameters);
+            }
+        } else {
+            $middleware = $this->container->get($definition);
+        }
 
         if (!$middleware instanceof MiddlewareInterface) {
-            throw new RuntimeException(sprintf('Middleware inválido: "%s".', $id));
+            throw new RuntimeException('Middleware inválido.');
         }
 
         return $middleware;
@@ -114,6 +132,24 @@ final class Application
     private function shareViewData(Request $request): void
     {
         $brand = (array) $this->config->get('theme.brand', []);
+        $context = $this->session->get('context');
+        $context = is_array($context) ? $context : null;
+        $userId = (int) ($this->session->get('auth.user_id') ?? 0);
+
+        $permissions = [];
+
+        if ($userId > 0) {
+            try {
+                $permissions = $this->authorization->permissionsForContext(
+                    $userId,
+                    $context !== null && $context['rede_id'] !== null ? (int) $context['rede_id'] : null,
+                    $context !== null && $context['unidade_id'] !== null ? (int) $context['unidade_id'] : null,
+                    $context !== null && ($context['regiao_id'] ?? null) !== null ? (int) $context['regiao_id'] : null
+                );
+            } catch (Throwable) {
+                $permissions = [];
+            }
+        }
 
         $this->view->shareMany([
             'app' => (array) $this->config->get('app', []),
@@ -126,6 +162,9 @@ final class Application
             'flash' => $this->session->flashes(),
             'currentPath' => $request->path,
             'defaultTheme' => (string) $this->config->get('theme.default', 'dark'),
+            'permissions' => $permissions,
+            'can' => static fn (string $permission): bool => in_array($permission, $permissions, true),
+            'context' => $context,
         ]);
     }
 }

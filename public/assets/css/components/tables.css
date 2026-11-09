@@ -41,3 +41,11 @@
     color: var(--color-text-muted);
     width: 40%;
 }
+
+.table__actions {
+    white-space: nowrap;
+}
+
+.table__actions form {
+    display: inline;
+}

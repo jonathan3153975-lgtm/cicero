@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Middleware\RoleMiddleware;
+use App\Services\AuthorizationService;
 use App\Support\Application;
 use App\Support\Config;
 use App\Support\Container;
@@ -51,14 +51,6 @@ $container->singleton(ExceptionHandler::class, static fn (Container $c): Excepti
     $c->get(Config::class),
     $c->get(LoggerInterface::class)
 ));
-$container->singleton(
-    'middleware.role.admin',
-    static fn (Container $c): RoleMiddleware => new RoleMiddleware(
-        $c->get(Session::class),
-        ['admin']
-    )
-);
-
 $router = new Router();
 $router->load(require $root . '/routes/web.php');
 $router->load(require $root . '/routes/api.php');
@@ -72,5 +64,6 @@ return new Application(
     $container->get(Session::class),
     $container->get(View::class),
     $container->get(Csrf::class),
-    $container->get(ExceptionHandler::class)
+    $container->get(ExceptionHandler::class),
+    $container->get(AuthorizationService::class)
 );

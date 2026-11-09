@@ -1,9 +1,25 @@
 <section class="page-heading">
     <div>
         <h2>Configurações</h2>
-        <p class="text-muted">Esta rota exige autenticação e o papel <code>admin</code>.</p>
+        <p class="text-muted">Rota protegida pela permissão <code>configuracao.visualizar</code>.</p>
     </div>
     <a class="btn btn-ghost btn-sm" href="/dashboard">Voltar ao painel</a>
+</section>
+
+<section class="card">
+    <header class="card__header">
+        <div>
+            <h3>Acesso atual</h3>
+            <p class="text-muted">Contexto e permissões efetivas na sessão.</p>
+        </div>
+        <span class="badge badge--accent"><?= e(is_array($context ?? null) ? ($context['label'] ?? '—') : '—') ?></span>
+    </header>
+
+    <div class="badge-list">
+        <?php foreach (($permissions ?? []) as $permission): ?>
+            <span class="badge badge--success"><?= e($permission) ?></span>
+        <?php endforeach; ?>
+    </div>
 </section>
 
 <section class="card-grid">

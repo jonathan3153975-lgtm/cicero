@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Controllers\Admin;
+
+use App\Repositories\AuditoriaRepository;
+use App\Services\AuditService;
+use App\Support\Request;
+use App\Support\Response;
+use App\Support\Session;
+use App\Support\View;
+
+final class AuditoriaController extends AdminController
+{
+    public function __construct(
+        View $view,
+        Session $session,
+        AuditService $audit,
+        private readonly AuditoriaRepository $auditoria
+    ) {
+        parent::__construct($view, $session, $audit);
+    }
+
+    public function index(Request $request): Response
+    {
+        return $this->render('admin.auditoria.index', [
+            'title' => 'Auditoria',
+            'registros' => $this->auditoria->latestForScope(
+                $this->contextRedeId(),
+                $this->contextUnidadeId(),
+                $this->contextRegiaoId(),
+                200
+            ),
+            'contextLabel' => $this->contextLabel(),
+        ]);
+    }
+}

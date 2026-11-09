@@ -82,3 +82,55 @@
     margin-top: var(--spacing-3);
     font-size: 0.85rem;
 }
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--spacing-4);
+}
+
+.form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-3);
+    margin-top: var(--spacing-2);
+}
+
+.permission-groups {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+    margin-top: var(--spacing-3);
+}
+
+.permission-group {
+    padding: var(--spacing-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.permission-group legend {
+    padding: 0 var(--spacing-2);
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.checkbox-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--spacing-2);
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+.checkbox input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--brand-primary);
+}

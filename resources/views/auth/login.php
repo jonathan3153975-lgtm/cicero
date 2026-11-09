@@ -1,6 +1,8 @@
 <?php
-$emailError = $errors['email'][0] ?? null;
-$passwordError = $errors['password'][0] ?? null;
+$emailErrorRaw = $errors['email'] ?? null;
+$passwordErrorRaw = $errors['password'] ?? null;
+$emailError = is_array($emailErrorRaw) ? ($emailErrorRaw[0] ?? null) : $emailErrorRaw;
+$passwordError = is_array($passwordErrorRaw) ? ($passwordErrorRaw[0] ?? null) : $passwordErrorRaw;
 $oldEmail = $old['email'] ?? '';
 ?>
 <section class="auth-form">
@@ -55,8 +57,7 @@ $oldEmail = $old['email'] ?? '';
     </form>
 
     <p class="auth-hint text-muted">
-        Credenciais de demonstração configuradas em <code>.env</code>.<br>
-        Substitua este fluxo pelo módulo real de autenticação.
+        As credenciais são individuais. Solicite acesso ao administrador da sua rede ou unidade.
     </p>
 
     <p class="auth-back"><a href="/">Voltar para a página inicial</a></p>

@@ -65,6 +65,44 @@ final class Validator
         return $this;
     }
 
+    public function cnpj(string $field, ?string $message = null): self
+    {
+        $value = preg_replace('/\D/', '', $this->value($field)) ?? '';
+
+        if ($value !== '' && !self::isValidCnpj($value)) {
+            $this->addError($field, $message ?? 'Informe um CNPJ válido.');
+        }
+
+        return $this;
+    }
+
+    public static function isValidCnpj(string $cnpj): bool
+    {
+        $cnpj = preg_replace('/\D/', '', $cnpj) ?? '';
+
+        if (mb_strlen($cnpj) !== 14 || preg_match('/^(\d)\1{13}$/', $cnpj) === 1) {
+            return false;
+        }
+
+        $first = self::cnpjDigit(substr($cnpj, 0, 12), [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
+        $second = self::cnpjDigit(substr($cnpj, 0, 13), [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
+
+        return $first === (int) $cnpj[12] && $second === (int) $cnpj[13];
+    }
+
+    private static function cnpjDigit(string $base, array $weights): int
+    {
+        $sum = 0;
+
+        foreach ($weights as $index => $weight) {
+            $sum += (int) $base[$index] * $weight;
+        }
+
+        $remainder = $sum % 11;
+
+        return $remainder < 2 ? 0 : 11 - $remainder;
+    }
+
     public function fails(): bool
     {
         return $this->errors !== [];
