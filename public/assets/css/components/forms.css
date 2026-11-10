@@ -96,6 +96,56 @@
     margin-top: var(--spacing-2);
 }
 
+.form__field--checkbox {
+    flex-direction: row;
+    align-items: center;
+}
+
+.form__field--full {
+    grid-column: 1 / -1;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--brand-primary);
+}
+
+.checkbox--inline {
+    flex-direction: row;
+    align-items: center;
+}
+
+.checkbox__label {
+    font-weight: 600;
+    color: var(--color-text);
+    white-space: nowrap;
+}
+
+.form__separator {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: var(--spacing-4) 0;
+}
+
+.form__section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: var(--spacing-4) 0 var(--spacing-2);
+    padding-bottom: var(--spacing-2);
+    border-bottom: 1px solid var(--color-border);
+}
+
 .permission-groups {
     display: flex;
     flex-direction: column;
@@ -285,4 +335,632 @@
 
 .input-group {
     position: relative;
+}
+
+/* ==========================================================================
+   Search Form - Pessoas Index
+   ========================================================================== */
+
+.card--search {
+    padding: var(--spacing-4);
+}
+
+.search-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.search-form__row {
+    display: flex;
+    align-items: stretch;
+    gap: var(--spacing-3);
+}
+
+.search-form__input-wrapper {
+    flex: 1;
+    min-width: 0;
+}
+
+.search-form__input {
+    width: 100%;
+}
+
+.search-form__actions {
+    display: flex;
+    gap: var(--spacing-2);
+    flex-shrink: 0;
+}
+
+.search-form__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    padding: 0 var(--spacing-4);
+    white-space: nowrap;
+}
+
+.search-form__btn .btn__text {
+    display: inline;
+}
+
+@media (max-width: 767px) {
+    .search-form__row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-form__actions {
+        justify-content: flex-end;
+    }
+
+    .search-form__btn {
+        padding: var(--spacing-2) var(--spacing-3);
+        font-size: 0.8rem;
+    }
+
+    .search-form__btn .btn__text {
+        display: none;
+    }
+
+    .search-form__btn[aria-label]::before {
+        content: attr(aria-label);
+        display: inline;
+        font-size: 0.8rem;
+    }
+}
+
+/* ==========================================================================
+   Results Card - Pessoas Index
+   ========================================================================== */
+
+.card--results {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.pessoas-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-12) var(--spacing-4);
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+.pessoas-empty__icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--spacing-4);
+    opacity: 0.4;
+}
+
+.pessoas-empty h3 {
+    margin: 0 0 var(--spacing-2);
+    font-size: 1.1rem;
+    color: var(--color-text);
+}
+
+.pessoas-empty p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.pessoas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-4);
+    padding: var(--spacing-2);
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+}
+
+/* Scrollbar styling for results */
+.pessoas-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.pessoas-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.pessoas-grid::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+}
+
+.pessoas-grid::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Pessoa Card
+   ========================================================================== */
+
+.pessoa-card {
+    background: var(--color-surface-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-4);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow var(--transition), border-color var(--transition);
+}
+
+.pessoa-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--brand-primary-light);
+}
+
+.pessoa-card__header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+}
+
+.pessoa-card__avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pessoa-card__avatar-letter {
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+
+.pessoa-card__main {
+    flex: 1;
+    min-width: 0;
+}
+
+.pessoa-card__nome {
+    margin: 0 0 var(--spacing-1);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pessoa-card__tipo {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+}
+
+.pessoa-card__status {
+    flex-shrink: 0;
+}
+
+.pessoa-card__details {
+    display: grid;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-3);
+    flex: 1;
+}
+
+.pessoa-card__field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+}
+
+.pessoa-card__field dt {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-text-muted);
+}
+
+.pessoa-card__field dd {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pessoa-card__actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: var(--spacing-3);
+    border-top: 1px solid var(--color-border);
+}
+
+.pessoa-card__actions .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: 0.8rem;
+}
+
+/* Mobile adjustments for cards */
+@media (max-width: 767px) {
+    .pessoas-grid {
+        grid-template-columns: 1fr;
+        padding: var(--spacing-2) var(--spacing-1);
+        gap: var(--spacing-3);
+    }
+
+    .pessoa-card {
+        padding: var(--spacing-3);
+    }
+
+    .pessoa-card__header {
+        gap: var(--spacing-2);
+    }
+
+    .pessoa-card__avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .pessoa-card__avatar-letter {
+        font-size: 1rem;
+    }
+
+    .pessoa-card__nome {
+        font-size: 0.9rem;
+    }
+
+    .pessoa-card__details {
+        gap: var(--spacing-1);
+    }
+
+    .pessoa-card__field dd {
+        font-size: 0.8rem;
+    }
+}
+
+/* ==========================================================================
+   Sticky Search Behavior (Mobile)
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .card--search.is-sticky {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        box-shadow: var(--shadow-lg);
+        border-radius: 0;
+        border-bottom: 1px solid var(--color-border);
+        animation: slideDown 0.2s ease-out;
+    }
+
+    .card--results.has-sticky-search {
+        padding-top: var(--spacing-4);
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+}
+
+/* Ensure body padding doesn't affect layout when not sticky */
+@media (min-width: 768px) {
+    body {
+        padding-top: 0 !important;
+    }
+}
+
+/* ==========================================================================
+   AJAX Loading State
+   ========================================================================== */
+
+.card--results.is-loading {
+    position: relative;
+    min-height: 200px;
+}
+
+.card--results.is-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(var(--color-surface-rgb), 0.8);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card--results.is-loading .spinner {
+    animation: spin 1s linear infinite;
+    width: 32px;
+    height: 32px;
+    color: var(--brand-primary);
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spinner circle {
+    stroke-dasharray: 30 100;
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+}
+
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 200;
+        stroke-dashoffset: -35;
+    }
+    100% {
+        stroke-dasharray: 90, 200;
+        stroke-dashoffset: -124;
+    }
+}
+
+/* ==========================================================================
+   Pessoas Table (Desktop)
+   ========================================================================== */
+
+.pessoas-table-wrapper {
+    overflow-x: auto;
+    margin: calc(var(--spacing-4) * -1) calc(var(--spacing-4) * -1) 0;
+    padding: 0 var(--spacing-4);
+}
+
+.pessoas-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    min-width: 800px;
+}
+
+.pessoas-table thead {
+    background: var(--color-surface);
+}
+
+.pessoas-table th {
+    padding: var(--spacing-3) var(--spacing-4);
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    border-bottom: 2px solid var(--color-border);
+    white-space: nowrap;
+}
+
+.pessoas-table tbody tr {
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--transition);
+}
+
+.pessoas-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.pessoas-table tbody tr:hover {
+    background: var(--color-surface);
+}
+
+.pessoas-table td {
+    padding: var(--spacing-3) var(--spacing-4);
+    vertical-align: middle;
+    color: var(--color-text);
+}
+
+.pessoas-table__nome {
+    max-width: 280px;
+}
+
+.pessoas-table__nome-main {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-weight: 500;
+}
+
+.pessoas-table__avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+    color: white;
+    font-weight: 700;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pessoas-table__nome-alt {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-weight: 400;
+    margin-top: 2px;
+}
+
+.pessoas-table__actions {
+    width: 48px;
+    text-align: center;
+}
+
+.pessoas-table__actions .btn-icon {
+    padding: var(--spacing-1) var(--spacing-2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ==========================================================================
+   Responsive: Table on Desktop, Cards on Mobile
+   ========================================================================== */
+
+@media (min-width: 768px) {
+    .pessoas-grid {
+        display: none !important;
+    }
+    
+    .pessoas-table-wrapper {
+        display: block;
+    }
+}
+
+@media (max-width: 767px) {
+    .pessoas-table-wrapper,
+    .modalidades-table-wrapper {
+        display: none !important;
+    }
+    
+    .pessoas-grid,
+    .modalidades-grid {
+        display: grid !important;
+    }
+    
+    .pessoas-table-wrapper,
+    .modalidades-table-wrapper {
+        margin: 0 calc(var(--spacing-4) * -1);
+        padding: 0 var(--spacing-4);
+    }
+}
+
+/* Modalidades Table (Desktop) */
+.modalidades-table-wrapper {
+    overflow-x: auto;
+    margin: calc(var(--spacing-4) * -1) calc(var(--spacing-4) * -1) 0;
+    padding: 0 var(--spacing-4);
+}
+
+.modalidades-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    min-width: 700px;
+}
+
+.modalidades-table thead {
+    background: var(--color-surface);
+}
+
+.modalidades-table th {
+    padding: var(--spacing-3) var(--spacing-4);
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    border-bottom: 2px solid var(--color-border);
+    white-space: nowrap;
+}
+
+.modalidades-table tbody tr {
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--transition);
+}
+
+.modalidades-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.modalidades-table tbody tr:hover {
+    background: var(--color-surface);
+}
+
+.modalidades-table td {
+    padding: var(--spacing-3) var(--spacing-4);
+    vertical-align: middle;
+    color: var(--color-text);
+}
+
+.modalidades-table__actions {
+    width: 48px;
+    text-align: center;
+}
+
+.modalidades-table__actions .btn-icon {
+    padding: var(--spacing-1) var(--spacing-2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modalidades Card adjustments */
+.modalidade-card__header {
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+}
+
+.modalidade-card__main {
+    flex: 1;
+    min-width: 120px;
+}
+
+.modalidade-card__abragencia {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+}
+
+.modalidade-card__details {
+    margin-bottom: var(--spacing-3);
+}
+
+@media (min-width: 768px) {
+    .modalidades-grid {
+        display: none !important;
+    }
+    
+    .modalidades-table-wrapper {
+        display: block;
+    }
+}
+
+@media (max-width: 767px) {
+    .modalidades-grid {
+        grid-template-columns: 1fr;
+        padding: var(--spacing-2) var(--spacing-1);
+        gap: var(--spacing-3);
+    }
+    
+    .modalidade-card {
+        padding: var(--spacing-3);
+    }
+    
+    .modalidade-card__header {
+        gap: var(--spacing-2);
+    }
+    
+    .modalidade-card__nome {
+        font-size: 0.9rem;
+    }
 }

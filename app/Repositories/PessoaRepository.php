@@ -120,13 +120,41 @@ final class PessoaRepository extends Repository
         }
 
         if ($search !== '') {
-            $where[] = '(p.nome LIKE :search_nome OR p.cpf LIKE :search_cpf'
-                . ' OR p.cnpj LIKE :search_cnpj OR p.email_principal LIKE :search_email)';
-            $term = '%' . $search . '%';
-            $parameters['search_nome'] = $term;
-            $parameters['search_cpf'] = $term;
-            $parameters['search_cnpj'] = $term;
-            $parameters['search_email'] = $term;
+            // Busca em todas as colunas textuais, com lógica AND para múltiplos termos
+            $searchTerms = array_filter(array_map('trim', explode(' ', $search)));
+            
+            if ($searchTerms !== []) {
+                $searchConditions = [];
+                $paramIndex = 0;
+                
+                foreach ($searchTerms as $term) {
+                    $likeTerm = '%' . $term . '%';
+                    $paramIndex++;
+                    
+                    $conditions = [
+                        'p.nome LIKE :search_nome_' . $paramIndex,
+                        'p.nome_social LIKE :search_nome_social_' . $paramIndex,
+                        'p.cpf LIKE :search_cpf_' . $paramIndex,
+                        'p.cnpj LIKE :search_cnpj_' . $paramIndex,
+                        'p.email_principal LIKE :search_email_' . $paramIndex,
+                        'p.telefone_principal LIKE :search_telefone_' . $paramIndex,
+                        'p.observacoes LIKE :search_obs_' . $paramIndex,
+                    ];
+                    
+                    $searchConditions[] = '(' . implode(' OR ', $conditions) . ')';
+                    
+                    $parameters['search_nome_' . $paramIndex] = $likeTerm;
+                    $parameters['search_nome_social_' . $paramIndex] = $likeTerm;
+                    $parameters['search_cpf_' . $paramIndex] = $likeTerm;
+                    $parameters['search_cnpj_' . $paramIndex] = $likeTerm;
+                    $parameters['search_email_' . $paramIndex] = $likeTerm;
+                    $parameters['search_telefone_' . $paramIndex] = $likeTerm;
+                    $parameters['search_obs_' . $paramIndex] = $likeTerm;
+                }
+                
+                // AND entre os termos: todos os termos devem ser encontrados
+                $where[] = '(' . implode(' AND ', $searchConditions) . ')';
+            }
         }
 
         if ($where !== []) {

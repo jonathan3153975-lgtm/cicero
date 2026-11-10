@@ -18,6 +18,11 @@ abstract class Controller
         return Response::html($this->view->render($template, $data, $layout));
     }
 
+    protected function renderPartial(string $template, array $data = []): Response
+    {
+        return Response::html($this->view->render($template, $data, null));
+    }
+
     protected function json(array $data, int $status = 200): Response
     {
         return Response::json($data, $status);

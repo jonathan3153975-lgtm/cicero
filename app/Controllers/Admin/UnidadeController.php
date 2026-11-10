@@ -132,7 +132,7 @@ final class UnidadeController extends AdminController
 
     private function redeOptions(): array
     {
-        return $this->isPlatformContext() ? $this->redes->all() : array_values(array_filter([
+        return $this->isPlatformContext() ? $this->redes->allActive() : array_values(array_filter([
             $this->redes->findById((int) $this->contextRedeId()),
         ]));
     }
@@ -149,10 +149,12 @@ final class UnidadeController extends AdminController
     private function regiaoOptions(): array
     {
         if ($this->isPlatformContext()) {
-            return $this->regioes->all();
+            return $this->regioes->allActive();
         }
 
-        return $this->regioes->forRede((int) $this->contextRedeId());
+        $redeId = (int) $this->contextRedeId();
+        $regioes = $this->regioes->forRede($redeId);
+        return array_values(array_filter($regioes, fn($r) => $r['status'] === 'ATIVO'));
     }
 
     private function regionError(int $redeId, mixed $value): ?array

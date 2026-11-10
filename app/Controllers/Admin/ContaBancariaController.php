@@ -27,6 +27,14 @@ final class ContaBancariaController extends AdminController
 
     public function index(Request $request): Response
     {
+        $unidades = $this->unidades->forScope(
+            $this->contextRedeId(),
+            $this->contextUnidadeId(),
+            $this->contextRegiaoId()
+        );
+        // Filter only active units for select dropdown
+        $unidades = array_values(array_filter($unidades, fn($u) => $u['situacao'] === 'ATIVA'));
+
         return $this->render('admin.contas-bancarias.index', array_merge($this->formState(), [
             'title' => 'Contas bancárias',
             'contas' => $this->contas->forScope(
@@ -34,11 +42,7 @@ final class ContaBancariaController extends AdminController
                 $this->contextUnidadeId(),
                 $this->contextRegiaoId()
             ),
-            'unidades' => $this->unidades->forScope(
-                $this->contextRedeId(),
-                $this->contextUnidadeId(),
-                $this->contextRegiaoId()
-            ),
+            'unidades' => $unidades,
         ]));
     }
 

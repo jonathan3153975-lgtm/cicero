@@ -148,18 +148,25 @@ final class DispositivoAcessoController extends AdminController
         $unidadeId = $this->contextUnidadeId();
 
         if ($unidadeId !== null) {
-            return array_values(array_filter([$this->unidades->findById($unidadeId)]));
+            $unidade = $this->unidades->findById($unidadeId);
+            return $unidade && $unidade['situacao'] === 'ATIVA' ? [$unidade] : [];
         }
 
         $regiaoId = $this->contextRegiaoId();
 
         if ($regiaoId !== null) {
-            return $this->unidades->forRegiao($regiaoId);
+            $unidades = $this->unidades->forRegiao($regiaoId);
+            return array_values(array_filter($unidades, fn($u) => $u['situacao'] === 'ATIVA'));
         }
 
         $redeId = $this->contextRedeId();
 
-        return $redeId !== null ? $this->unidades->forRede($redeId) : $this->unidades->all();
+        if ($redeId !== null) {
+            $unidades = $this->unidades->forRede($redeId);
+            return array_values(array_filter($unidades, fn($u) => $u['situacao'] === 'ATIVA'));
+        }
+
+        return $this->unidades->allActive();
     }
 
     private function regiaoOptions(): array
@@ -167,9 +174,10 @@ final class DispositivoAcessoController extends AdminController
         $redeId = $this->contextRedeId();
 
         if ($redeId === null) {
-            return $this->regioes->all();
+            return $this->regioes->allActive();
         }
 
-        return $this->regioes->forRede($redeId);
+        $regioes = $this->regioes->forRede($redeId);
+        return array_values(array_filter($regioes, fn($r) => $r['status'] === 'ATIVO'));
     }
 }

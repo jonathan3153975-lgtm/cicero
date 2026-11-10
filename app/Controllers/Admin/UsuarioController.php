@@ -206,7 +206,7 @@ final class UsuarioController extends AdminController
 
     private function redeOptions(): array
     {
-        return $this->isPlatformContext() ? $this->redes->all() : array_values(array_filter([
+        return $this->isPlatformContext() ? $this->redes->allActive() : array_values(array_filter([
             $this->redes->findById((int) $this->contextRedeId()),
         ]));
     }
@@ -214,20 +214,23 @@ final class UsuarioController extends AdminController
     private function regiaoOptions(?int $redeId): array
     {
         if ($redeId === null) {
-            return $this->regioes->all();
+            return $this->regioes->allActive();
         }
-        return $this->regioes->forRede($redeId);
+        $regioes = $this->regioes->forRede($redeId);
+        return array_values(array_filter($regioes, fn($r) => $r['status'] === 'ATIVO'));
     }
 
     private function unidadeOptions(?int $redeId, ?int $regiaoId): array
     {
         if ($regiaoId !== null) {
-            return $this->unidades->forRegiao($regiaoId);
+            $unidades = $this->unidades->forRegiao($regiaoId);
+            return array_values(array_filter($unidades, fn($u) => $u['situacao'] === 'ATIVA'));
         }
         if ($redeId !== null) {
-            return $this->unidades->forRede($redeId);
+            $unidades = $this->unidades->forRede($redeId);
+            return array_values(array_filter($unidades, fn($u) => $u['situacao'] === 'ATIVA'));
         }
-        return $this->unidades->all();
+        return $this->unidades->allActive();
     }
 
     private function resolveFilterRedeId(?int $filterRedeId): ?int

@@ -40,6 +40,7 @@ export function initDependentSelects() {
     document.querySelectorAll('[data-regiao-select]').forEach((regiaoSelect) => {
         const form = regiaoSelect.closest('form');
         const unidadeSelect = form?.querySelector('#unidade_id');
+        const redeSelect = form?.querySelector('[data-rede-select]');
 
         if (!unidadeSelect) {
             return;
@@ -47,6 +48,7 @@ export function initDependentSelects() {
 
         const filterUnidades = () => {
             const regiaoId = regiaoSelect.value;
+            const redeId = redeSelect?.value ?? '';
             const selected = unidadeSelect.value;
             let selectedIsValid = selected === '';
 
@@ -56,7 +58,20 @@ export function initDependentSelects() {
                 }
 
                 const optionRegiaoId = option.dataset.regiaoId;
-                const matches = regiaoId === '' || optionRegiaoId === regiaoId;
+                const optionRedeId = option.dataset.redeId;
+                
+                // Se região selecionada, filtra por região
+                // Senão, se rede selecionada, filtra por rede
+                // Senão, mostra todas
+                let matches = false;
+                if (regiaoId !== '') {
+                    matches = optionRegiaoId === regiaoId;
+                } else if (redeId !== '') {
+                    matches = optionRedeId === redeId;
+                } else {
+                    matches = true;
+                }
+
                 option.hidden = !matches;
                 option.disabled = !matches;
 
@@ -71,6 +86,8 @@ export function initDependentSelects() {
         };
 
         regiaoSelect.addEventListener('change', filterUnidades);
+        // Also filter when rede changes
+        redeSelect?.addEventListener('change', filterUnidades);
         filterUnidades();
     });
 }

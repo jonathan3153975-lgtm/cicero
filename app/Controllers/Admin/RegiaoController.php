@@ -126,7 +126,7 @@ final class RegiaoController extends AdminController
 
     private function redeOptions(): array
     {
-        return $this->isPlatformContext() ? $this->redes->all() : array_values(array_filter([
+        return $this->isPlatformContext() ? $this->redes->allActive() : array_values(array_filter([
             $this->redes->findById((int) $this->contextRedeId()),
         ]));
     }

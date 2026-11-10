@@ -8,6 +8,8 @@ use App\Exceptions\NotFoundException;
 use App\Exceptions\ValidationException;
 use App\Repositories\PessoaRepository;
 use App\Repositories\RedeRepository;
+use App\Repositories\RegiaoRepository;
+use App\Repositories\UnidadeRepository;
 use App\Services\AuditService;
 use App\Services\PessoaService;
 use App\Support\Request;
@@ -23,7 +25,9 @@ final class PessoaController extends AdminController
         AuditService $audit,
         private readonly PessoaRepository $pessoas,
         private readonly PessoaService $service,
-        private readonly RedeRepository $redes
+        private readonly RedeRepository $redes,
+        private readonly RegiaoRepository $regioes,
+        private readonly UnidadeRepository $unidades
     ) {
         parent::__construct($view, $session, $audit);
     }
@@ -31,16 +35,26 @@ final class PessoaController extends AdminController
     public function index(Request $request): Response
     {
         $search = trim((string) $request->query('busca', ''));
+        $pessoas = $this->service->forScope(
+            $this->contextRedeId(),
+            $this->contextUnidadeId(),
+            $this->contextRegiaoId(),
+            $this->actorId(),
+            $search
+        );
+
+        // AJAX request - return only results partial
+        if ($request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return $this->renderPartial('admin.pessoas._resultados', [
+                'pessoas' => $pessoas,
+                'search' => $search,
+                'canEdit' => isset($this->can) && $this->can('pessoa.editar'),
+            ]);
+        }
 
         return $this->render('admin.pessoas.index', [
             'title' => 'Pessoas',
-            'pessoas' => $this->service->forScope(
-                $this->contextRedeId(),
-                $this->contextUnidadeId(),
-                $this->contextRegiaoId(),
-                $this->actorId(),
-                $search
-            ),
+            'pessoas' => $pessoas,
             'search' => $search,
         ]);
     }
@@ -51,8 +65,12 @@ final class PessoaController extends AdminController
             'title' => 'Nova pessoa',
             'item' => null,
             'redes' => $this->redeOptions(),
+            'regioes' => $this->regiaoOptions(),
+            'unidades' => $this->unidadeOptions(),
             'isPlatform' => $this->isPlatformContext(),
             'currentRedeId' => $this->contextRedeId(),
+            'currentRegiaoId' => $this->contextRegiaoId(),
+            'currentUnidadeId' => $this->contextUnidadeId(),
         ]));
     }
 
@@ -81,8 +99,12 @@ final class PessoaController extends AdminController
             'title' => 'Editar pessoa',
             'item' => $item,
             'redes' => $this->redeOptions(),
+            'regioes' => $this->regiaoOptions(),
+            'unidades' => $this->unidadeOptions(),
             'isPlatform' => $this->isPlatformContext(),
             'currentRedeId' => $this->contextRedeId(),
+            'currentRegiaoId' => $this->contextRegiaoId(),
+            'currentUnidadeId' => $this->contextUnidadeId(),
         ]));
     }
 
@@ -144,8 +166,36 @@ final class PessoaController extends AdminController
 
     private function redeOptions(): array
     {
-        return $this->isPlatformContext() ? $this->redes->all() : array_values(array_filter([
+        return $this->isPlatformContext() ? $this->redes->allActive() : array_values(array_filter([
             $this->redes->findById((int) $this->contextRedeId()),
         ]));
+    }
+
+    private function regiaoOptions(): array
+    {
+        if ($this->isPlatformContext()) {
+            return $this->regioes->allActive();
+        }
+        $redeId = (int) $this->contextRedeId();
+        $regioes = $this->regioes->forRede($redeId);
+        return array_values(array_filter($regioes, fn($r) => $r['status'] === 'ATIVO'));
+    }
+
+    private function unidadeOptions(): array
+    {
+        $regiaoId = $this->contextRegiaoId();
+        $redeId = $this->contextRedeId();
+        
+        if ($regiaoId !== null) {
+            $unidades = $this->unidades->forRegiao($regiaoId);
+            return array_values(array_filter($unidades, fn($u) => $u['situacao'] === 'ATIVA'));
+        }
+        
+        if ($redeId !== null) {
+            $unidades = $this->unidades->forRede($redeId);
+            return array_values(array_filter($unidades, fn($u) => $u['situacao'] === 'ATIVA'));
+        }
+        
+        return $this->unidades->allActive();
     }
 }

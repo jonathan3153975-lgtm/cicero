@@ -5,6 +5,7 @@ import { initRichTextEditors } from './components/rich-text.js';
 import { initLoadingOverlay } from './components/loading-overlay.js';
 import { initDependentSelects } from './components/dependent-selects.js';
 import { initPessoaSearch } from './components/pessoa-search.js';
+import { initPessoasSearch } from './components/pessoas-search.js';
 import { initSidebar } from './modules/nav.js';
 import { initHealthCheck } from './modules/health-check.js';
 
@@ -16,6 +17,7 @@ function boot() {
     initLoadingOverlay();
     initDependentSelects();
     initPessoaSearch();
+    initPessoasSearch();
     initSidebar();
     initHealthCheck();
 }

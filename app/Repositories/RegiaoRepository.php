@@ -39,6 +39,15 @@ final class RegiaoRepository extends Repository
         return $statement->fetchAll();
     }
 
+    public function allActive(): array
+    {
+        $statement = $this->pdo()->query(
+            'SELECT id, rede_id, nome FROM regioes WHERE status = \'ATIVO\' ORDER BY nome ASC'
+        );
+
+        return $statement->fetchAll();
+    }
+
     public function linkUnidade(int $regiaoId, int $unidadeId): void
     {
         $statement = $this->pdo()->prepare(

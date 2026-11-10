@@ -2,6 +2,25 @@ function digits(value) {
     return String(value).replace(/\D/g, '');
 }
 
+function maskCpf(value) {
+    const valueDigits = digits(value).slice(0, 11);
+    let result = valueDigits.slice(0, 3);
+
+    if (valueDigits.length > 3) {
+        result += '.' + valueDigits.slice(3, 6);
+    }
+
+    if (valueDigits.length > 6) {
+        result += '.' + valueDigits.slice(6, 9);
+    }
+
+    if (valueDigits.length > 9) {
+        result += '-' + valueDigits.slice(9, 11);
+    }
+
+    return result;
+}
+
 function maskCnpj(value) {
     const valueDigits = digits(value).slice(0, 14);
     let result = valueDigits.slice(0, 2);
@@ -89,7 +108,31 @@ function isValidCnpj(value) {
     return first === Number(cnpj[12]) && second === Number(cnpj[13]);
 }
 
+function isValidCpf(value) {
+    const cpf = digits(value);
+
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+        return false;
+    }
+
+    const calculateDigit = (base, weights) => {
+        const sum = weights.reduce((total, weight, index) => total + Number(base[index]) * weight, 0);
+        const remainder = sum % 11;
+
+        return remainder < 2 ? 0 : 11 - remainder;
+    };
+
+    const first = calculateDigit(cpf.slice(0, 9), [10, 9, 8, 7, 6, 5, 4, 3, 2]);
+    const second = calculateDigit(cpf.slice(0, 10), [11, 10, 9, 8, 7, 6, 5, 4, 3, 2]);
+
+    return first === Number(cpf[9]) && second === Number(cpf[10]);
+}
+
 function maskValue(mask, value) {
+    if (mask === 'cpf') {
+        return maskCpf(value);
+    }
+
     if (mask === 'cnpj') {
         return maskCnpj(value);
     }
@@ -173,7 +216,7 @@ export function initInputMasks() {
         input.addEventListener('input', () => {
             input.value = maskValue(mask, input.value);
 
-            if (mask === 'cnpj') {
+            if (mask === 'cnpj' || mask === 'cpf') {
                 input.setCustomValidity('');
             }
         });
@@ -185,6 +228,21 @@ export function initInputMasks() {
 
             if (cnpj !== '' && !isValidCnpj(cnpj)) {
                 input.setCustomValidity('Informe um CNPJ válido.');
+                input.classList.add('is-invalid');
+                return;
+            }
+
+            input.setCustomValidity('');
+            input.classList.remove('is-invalid');
+        });
+    });
+
+    document.querySelectorAll('[data-mask="cpf"]').forEach((input) => {
+        input.addEventListener('blur', () => {
+            const cpf = digits(input.value);
+
+            if (cpf !== '' && !isValidCpf(cpf)) {
+                input.setCustomValidity('Informe um CPF válido.');
                 input.classList.add('is-invalid');
                 return;
             }
